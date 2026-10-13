@@ -1,0 +1,538 @@
+[
+ {
+  "run": "commit_storm-awr-20261013T1704",
+  "truth": "commit_storm",
+  "kind": "awr",
+  "addm": [
+   "commit_storm",
+   "cpu_sql"
+  ],
+  "raw": [
+   "commit_storm",
+   "cpu_sql",
+   "row_lock"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.8,
+  "rules": [
+   "commit_storm"
+  ],
+  "second": [
+   "commit_storm"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 3.7,
+  "headline": "High Log File Sync Wait Time Indicates Frequent Commits",
+  "addm_pass": true,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "commit_storm-statspack-20261013T1720",
+  "truth": "commit_storm",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "commit_storm",
+   "row_lock",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.0,
+  "rules": [
+   "commit_storm"
+  ],
+  "second": [
+   "commit_storm"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.4,
+  "headline": "High Log File Sync Wait Time Indicates Frequent Commits",
+  "addm_pass": null,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "cpu_sql-awr-20261013T1719",
+  "truth": "cpu_sql",
+  "kind": "awr",
+  "addm": [
+   "cpu_sql"
+  ],
+  "raw": [
+   "cpu_sql",
+   "hard_parse",
+   "other"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.2,
+  "rules": [
+   "cpu_sql"
+  ],
+  "second": [
+   "cpu_sql"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High CPU utilization driven by a single, CPU-intensive SQL statement.",
+  "addm_pass": true,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "cpu_sql-statspack-20261013T1735",
+  "truth": "cpu_sql",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "cpu_sql",
+   "other"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.7,
+  "rules": [
+   "cpu_sql"
+  ],
+  "second": [
+   "cpu_sql"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.4,
+  "headline": "CPU usage dominated by a single, CPU-intensive SQL statement.",
+  "addm_pass": null,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "full_scan+commit_storm-awr-20261013T1735",
+  "truth": "full_scan+commit_storm",
+  "kind": "awr",
+  "addm": [
+   "commit_storm",
+   "cpu_sql",
+   "cpu_cap"
+  ],
+  "raw": [
+   "commit_storm",
+   "cpu_cap",
+   "row_lock"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.1,
+  "rules": [
+   "full_scan",
+   "commit_storm",
+   "cpu_cap"
+  ],
+  "second": [
+   "full_scan",
+   "commit_storm"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "Performance bottleneck driven by excessive full table scans and high commit frequency.",
+  "addm_pass": false,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "full_scan+commit_storm-statspack-20261013T1750",
+  "truth": "full_scan+commit_storm",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "commit_storm",
+   "row_lock",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.6,
+  "rules": [
+   "commit_storm",
+   "full_scan"
+  ],
+  "second": [
+   "commit_storm",
+   "full_scan"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High Log File Sync Wait Time Driven by Frequent Commits and Full Table Scans",
+  "addm_pass": null,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "full_scan-awr-20261013T1649",
+  "truth": "full_scan",
+  "kind": "awr",
+  "addm": [
+   "cpu_sql",
+   "cpu_cap"
+  ],
+  "raw": [
+   "cpu_cap",
+   "cpu_sql",
+   "hard_parse"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.2,
+  "rules": [
+   "full_scan",
+   "cpu_cap",
+   "cpu_sql"
+  ],
+  "second": [
+   "full_scan",
+   "cpu_cap",
+   "cpu_sql"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.4,
+  "headline": "Performance is impacted by missing indexes leading to full scans and CPU resource contention.",
+  "addm_pass": false,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "full_scan-statspack-20261013T1706",
+  "truth": "full_scan",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "cpu_sql",
+   "hard_parse",
+   "full_scan"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.7,
+  "rules": [
+   "full_scan",
+   "cpu_sql"
+  ],
+  "second": [
+   "full_scan",
+   "cpu_sql"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.6,
+  "headline": "Performance bottleneck driven by high I/O and CPU usage from a single SQL statement.",
+  "addm_pass": null,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "hard_parse+row_lock-awr-20261013T1727",
+  "truth": "hard_parse+row_lock",
+  "kind": "awr",
+  "addm": [
+   "cpu_sql",
+   "row_lock",
+   "hard_parse",
+   "commit_storm"
+  ],
+  "raw": [
+   "row_lock",
+   "hard_parse",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.2,
+  "rules": [
+   "hard_parse",
+   "row_lock"
+  ],
+  "second": [
+   "row_lock",
+   "hard_parse"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.4,
+  "headline": "High Row Lock Contention and Excessive Hard Parsing Identified in AWR Report",
+  "addm_pass": true,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "hard_parse+row_lock-statspack-20261013T1742",
+  "truth": "hard_parse+row_lock",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "row_lock",
+   "cpu_sql",
+   "hard_parse"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.6,
+  "rules": [
+   "hard_parse",
+   "row_lock"
+  ],
+  "second": [
+   "row_lock",
+   "hard_parse"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High Row Lock Contention and Excessive Hard Parsing Identified in Statspack Report",
+  "addm_pass": null,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "hard_parse-awr-20261013T1642",
+  "truth": "hard_parse",
+  "kind": "awr",
+  "addm": [
+   "cpu_sql",
+   "cpu_cap",
+   "hard_parse"
+  ],
+  "raw": [
+   "cpu_cap",
+   "hard_parse",
+   "hard_parse"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.2,
+  "rules": [
+   "hard_parse",
+   "cpu_cap"
+  ],
+  "second": [
+   "cpu_cap",
+   "hard_parse"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "Instance CPU Capping and High Hard Parsing are the primary performance bottlenecks.",
+  "addm_pass": false,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "hard_parse-statspack-20261013T1658",
+  "truth": "hard_parse",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "hard_parse",
+   "cpu_sql",
+   "cpu_cap"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.5,
+  "rules": [
+   "hard_parse"
+  ],
+  "second": [
+   "hard_parse"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High Hard Parse Rate Indicates Inefficient SQL Usage",
+  "addm_pass": null,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "healthy-awr-20261013T1634",
+  "truth": "healthy",
+  "kind": "awr",
+  "addm": [
+   "healthy"
+  ],
+  "raw": [
+   "row_lock",
+   "hard_parse",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.2,
+  "rules": [
+   "healthy",
+   "row_lock"
+  ],
+  "second": [
+   "healthy"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "AWR Report indicates a healthy performance profile with no significant bottlenecks identified.",
+  "addm_pass": true,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "healthy-statspack-20261013T1651",
+  "truth": "healthy",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "row_lock",
+   "commit_storm",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.6,
+  "rules": [
+   "healthy",
+   "row_lock"
+  ],
+  "second": [
+   "healthy"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.4,
+  "headline": "Statspack indicates no significant performance bottlenecks during the monitored window.",
+  "addm_pass": null,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "row_lock-awr-20261013T1657",
+  "truth": "row_lock",
+  "kind": "awr",
+  "addm": [
+   "row_lock",
+   "cpu_sql"
+  ],
+  "raw": [
+   "row_lock",
+   "commit_storm",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.3,
+  "rules": [
+   "row_lock"
+  ],
+  "second": [
+   "row_lock"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High Row Lock Contention is the Primary Performance Bottleneck",
+  "addm_pass": true,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "row_lock-statspack-20261013T1713",
+  "truth": "row_lock",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "row_lock",
+   "commit_storm",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.6,
+  "rules": [
+   "row_lock"
+  ],
+  "second": [
+   "row_lock"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High Row Lock Contention is the Primary Performance Bottleneck",
+  "addm_pass": null,
+  "raw_pass": true,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "seq_nocache-awr-20261013T1712",
+  "truth": "seq_nocache",
+  "kind": "awr",
+  "addm": [
+   "commit_storm",
+   "cpu_sql",
+   "seq_nocache"
+  ],
+  "raw": [
+   "commit_storm",
+   "row_lock",
+   "seq_nocache"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 6.3,
+  "rules": [
+   "commit_storm",
+   "seq_nocache"
+  ],
+  "second": [
+   "commit_storm",
+   "seq_nocache"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.3,
+  "headline": "High Log File Sync Wait Time Driven by Frequent Commits and Sequence Contention",
+  "addm_pass": false,
+  "raw_pass": false,
+  "rules_pass": true,
+  "second_pass": true
+ },
+ {
+  "run": "seq_nocache-statspack-20261013T1728",
+  "truth": "seq_nocache",
+  "kind": "statspack",
+  "addm": null,
+  "raw": [
+   "commit_storm",
+   "row_lock",
+   "cpu_sql"
+  ],
+  "raw_unsupported": [],
+  "raw_s": 5.5,
+  "rules": [
+   "commit_storm"
+  ],
+  "second": [
+   "commit_storm"
+  ],
+  "second_unsupported": [],
+  "second_retried": false,
+  "second_s": 4.2,
+  "headline": "High Log File Sync Wait Time Indicates Frequent Commits",
+  "addm_pass": null,
+  "raw_pass": false,
+  "rules_pass": false,
+  "second_pass": false
+ }
+]
