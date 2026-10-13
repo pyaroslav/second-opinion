@@ -1,0 +1,184 @@
+	  ADDM Report for Task 'so_19_20'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 19 to 20.
+Time period starts at 13-OCT-26 04.42.12 PM
+Time period ends at 13-OCT-26 04.49.14 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 1998 seconds.
+The average number of active sessions was 4.73.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 4.73		   99.79%
+Average of all 2 containers:  2 	 2.37		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       2.37		  4.74
+
+Summary of Findings
+-------------------
+   Description			    Active Sessions	 Recommendations
+				    Percent of Activity
+   -------------------------------  -------------------  ---------------
+1  Resource Manager CPU Throttling  2.33 | 49.3 	 1
+2  Hard Parse			    1.36 | 28.67	 0
+3  CPU Usage			    1.31 | 27.65	 1
+4  Soft Parse			    .69 | 14.67 	 2
+5  Shared Pool Latches		    .43 | 9.16		 0
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Resource Manager CPU Throttling
+Impact is 2.34 active sessions, 49.3% of total activity.
+--------------------------------------------------------
+CPU Resource Manager is enabled and database sessions were found waiting for
+CPU.
+
+  Top containers waiting for CPU (by Avg. Active Sessions)
+  --------------------------------------------------------
+  DBID	       Container Name	Allocated  Avg. Active Sess  Percent
+				CPUs			     of Total
+  -----------  ---------------	---------  ----------------  --------
+  3182349174   FREEPDB1 	2	   2.34 	     100%
+  Average of all 2 containers:	2	   1.17 	     50%
+
+
+  Top containers waiting for CPU per Allocated CPU
+  ------------------------------------------------
+  DBID	      Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  ----------------
+  3182349174  FREEPDB1	      2 	 1.17		    2.34
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is 2.33 active sessions, 49.3% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Session CPU consumption was throttled by the Oracle Resource Manager.
+      Consider revising the resource plan that was active during the analysis
+      period.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Scheduler" was consuming significant database time.
+      Impact is 2.33 active sessions, 49.3% of total activity.
+
+
+Finding 2: Hard Parse
+Impact is 1.36 active sessions, 28.67% of total activity.
+---------------------------------------------------------
+Hard parsing of SQL statements was consuming significant database time.
+Hard parses due to cursor environment mismatch were not consuming significant
+database time.
+Hard parsing SQL statements that encountered parse errors was not consuming
+significant database time.
+Hard parses due to literal usage and cursor invalidation were not consuming
+significant database time.
+
+   No recommendations are available.
+
+
+Finding 3: CPU Usage
+Impact is 1.31 active sessions, 27.65% of total activity.
+---------------------------------------------------------
+Time spent on the CPU by the instance was responsible for a substantial part
+of database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 1.31 active sessions, 27.65% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Parsing SQL statements were consuming significant CPU. Please refer to
+      other findings in this task about parsing for further details.
+
+
+Finding 4: Soft Parse
+Impact is .7 active sessions, 14.67% of total activity.
+-------------------------------------------------------
+Soft parsing of SQL statements was consuming significant database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is .69 active sessions, 14.67% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Investigate application logic to keep open the frequently used cursors.
+      Note that cursors are closed by both cursor close calls and session
+      disconnects.
+
+   Recommendation 2: Database Configuration
+   Estimated benefit is .69 active sessions, 14.67% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Consider increasing the session cursor cache size by increasing the
+      value of parameter "session_cached_cursors".
+   Rationale
+      The value of parameter "session_cached_cursors" was "50" during the
+      analysis period.
+
+
+Finding 5: Shared Pool Latches
+Impact is .43 active sessions, 9.16% of total activity.
+-------------------------------------------------------
+Contention for latches related to the shared pool was consuming significant
+database time.
+Waits for "latch: shared pool" amounted to 8% of database time.
+
+   No recommendations are available.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Concurrency" was consuming significant database time.
+      Impact is .44 active sessions, 9.23% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+Wait class "Commit" was not consuming significant database time.
+Wait class "Configuration" was not consuming significant database time.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+
+
+

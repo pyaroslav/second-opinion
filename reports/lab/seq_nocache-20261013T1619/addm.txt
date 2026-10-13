@@ -1,0 +1,310 @@
+	  ADDM Report for Task 'so_13_14'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 13 to 14.
+Time period starts at 13-OCT-26 04.19.59 PM
+Time period ends at 13-OCT-26 04.25.00 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 1621 seconds.
+The average number of active sessions was 5.39.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 5.36		   99.81%
+Average of all 2 containers:  2 	 2.69		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       2.68		  5.36
+
+Summary of Findings
+-------------------
+   Description			     Active Sessions	  Recommendations
+				     Percent of Activity
+   --------------------------------  -------------------  ---------------
+1  Top SQL Statements		     5.11 | 94.94	  1
+2  Sequence Usage		     4.44 | 82.42	  1
+3  Unusual "Concurrency" Wait Event  3.21 | 59.6	  4
+4  Commits and Rollbacks	     .48 | 8.98 	  1
+5  Shared Pool Latches		     .4 | 7.46		  1
+6  Log File Switches		     .16 | 3.03 	  2
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Top SQL Statements
+Impact is 5.1 active sessions, 94.94% of total activity.
+--------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is 5.11 active sessions, 94.94% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate the INSERT statement with SQL_ID "2jkcnk7352hak" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID 2jkcnk7352hak.
+	 insert into events values (seq_nocache.nextval, sysdate, 'nocache')
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent only 22% of its database time on CPU, I/O and Cluster
+      waits. Therefore, the SQL Tuning Advisor is not applicable in this case.
+      Look at performance data for the SQL to find potential improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "2jkcnk7352hak" was executed 3272147 times and
+      had an average elapsed time of 0.00043 seconds.
+   Rationale
+      Waiting for event "row cache lock" in wait class "Concurrency" accounted
+      for 59% of the database time spent in processing the SQL statement with
+      SQL_ID "2jkcnk7352hak".
+   Rationale
+      Waiting for event "row cache mutex" in wait class "Concurrency"
+      accounted for 9% of the database time spent in processing the SQL
+      statement with SQL_ID "2jkcnk7352hak".
+   Rationale
+      Waiting for event "log file switch (checkpoint incomplete)" in wait
+      class "Configuration" accounted for 5% of the database time spent in
+      processing the SQL statement with SQL_ID "2jkcnk7352hak".
+
+
+Finding 2: Sequence Usage
+Impact is 4.42 active sessions, 82.42% of total activity.
+---------------------------------------------------------
+Sequence cache misses were consuming significant database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 4.44 active sessions, 82.42% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate application or look at top SQL to find hot sequences. Use a
+      larger cache size for those sequences. Try avoiding the use of the ORDER
+      setting if running RAC.
+
+
+Finding 3: Unusual "Concurrency" Wait Event
+Impact is 3.2 active sessions, 59.6% of total activity.
+-------------------------------------------------------
+Wait event "row cache lock" in wait class "Concurrency" was consuming
+significant database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 3.21 active sessions, 59.6% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Investigate the cause for high "row cache lock" waits. Refer to Oracle's
+      "Database Reference" for the description of this wait event.
+   Action
+      Look at the "Top SQL Statements" finding for SQL statements consuming
+      significant time on the "row cache lock" wait event. For example, the
+      INSERT statement with SQL_ID "2jkcnk7352hak" is responsible for 94% of
+      these waits.
+
+   Recommendation 2: Application Analysis
+   Estimated benefit is 3.21 active sessions, 59.6% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Investigate the cause for high "row cache lock" waits in Module
+      "lab-workload".
+   Rationale
+      The module activity was in container FREEPDB1 with database ID
+      3182349174.
+
+   Recommendation 3: Application Analysis
+   Estimated benefit is 3.21 active sessions, 59.6% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Investigate the cause for high "row cache lock" waits in Service
+      "freepdb1".
+   Rationale
+      The session connected to container FREEPDB1 with database ID 3182349174.
+
+   Recommendation 4: Application Analysis
+   Estimated benefit is 3.21 active sessions, 59.6% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Investigate the cause for high "row cache lock" waits with P1,P2,P3
+      ("cache id, mode, request") values "13", "0" and "5" respectively.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Concurrency" was consuming significant database time.
+      Impact is 3.61 active sessions, 67.06% of total activity.
+
+
+Finding 4: Commits and Rollbacks
+Impact is .48 active sessions, 8.98% of total activity.
+-------------------------------------------------------
+Waits on event "log file sync" while performing COMMIT and ROLLBACK operations
+were consuming significant database time.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   9238.43  99.72%
+  1514744704   CDB$ROOT 	2	   26.22    .28%
+  Average of all 2 containers:	2	   4632.18  50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  -------
+  3182349174  FREEPDB1	      2 	 4619.21	    9238.42
+  1514744704  CDB$ROOT	      2 	 13.11		    26.22
+
+
+   Recommendation 1: Host Configuration
+   Estimated benefit is .48 active sessions, 8.98% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Investigate the possibility of improving the performance of I/O to the
+      online redo log files.
+   Rationale
+      The average size of writes to the online redo log files was 22 K and the
+      average time per write was 0 milliseconds.
+   Rationale
+      The total I/O throughput on redo log files was 0 K per second for reads
+      and 8.9 M per second for writes.
+   Rationale
+      The redo log I/O throughput was divided as follows: 0% by RMAN and
+      recovery, 100% by Log Writer, 0% by Archiver, 0% by Streams AQ and 0% by
+      all other activity.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Commit" was consuming significant database time.
+      Impact is .48 active sessions, 8.98% of total activity.
+
+
+Finding 5: Shared Pool Latches
+Impact is .4 active sessions, 7.46% of total activity.
+------------------------------------------------------
+Contention for latches related to the shared pool was consuming significant
+database time.
+Waits for "row cache mutex" amounted to 7% of database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is .4 active sessions, 7.46% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Investigate the cause for latch contention using the given blocking
+      sessions or modules.
+   Rationale
+      The session with ID 175 and serial number 37053 in instance number 1 was
+      the blocking session responsible for 50% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Concurrency" was consuming significant database time.
+      Impact is 3.61 active sessions, 67.06% of total activity.
+
+
+Finding 6: Log File Switches
+Impact is .16 active sessions, 3.03% of total activity.
+-------------------------------------------------------
+Log file switch operations were consuming significant database time while
+waiting for checkpoint completion.
+This problem can be caused by use of hot backup mode on tablespaces.
+DML to tablespaces in hot backup mode causes generation of additional redo.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   9238.43  99.72%
+  1514744704   CDB$ROOT 	2	   26.22    .28%
+  Average of all 2 containers:	2	   4632.18  50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  -------
+  3182349174  FREEPDB1	      2 	 4619.21	    9238.42
+  1514744704  CDB$ROOT	      2 	 13.11		    26.22
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is .16 active sessions, 3.03% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Verify whether incremental shipping was used for standby databases.
+
+   Recommendation 2: Database Configuration
+   Estimated benefit is .16 active sessions, 3.03% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Increase the size of the log files to 2048 M to hold at least 20 minutes
+      of redo information.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Configuration" was consuming significant database time.
+      Impact is .16 active sessions, 3.05% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+
+

@@ -1,0 +1,12 @@
+{
+ "fault": "seq_nocache",
+ "cause": "a NOCACHE ORDER sequence used by many concurrent sessions (sequence/enqueue contention)",
+ "sessions": 8,
+ "seconds": 300,
+ "snapshots": [
+  13,
+  14
+ ],
+ "started": "2026-10-13T16:19:59+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)"
+}

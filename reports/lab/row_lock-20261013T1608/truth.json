@@ -1,0 +1,12 @@
+{
+ "fault": "row_lock",
+ "cause": "row lock contention: sessions queue on the same rows (enq: TX - row lock contention)",
+ "sessions": 6,
+ "seconds": 300,
+ "snapshots": [
+  9,
+  10
+ ],
+ "started": "2026-10-13T16:08:50+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)"
+}

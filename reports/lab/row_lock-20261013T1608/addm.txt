@@ -1,0 +1,182 @@
+	  ADDM Report for Task 'so_9_10'
+	  ------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 9 to 10.
+Time period starts at 13-OCT-26 04.08.49 PM
+Time period ends at 13-OCT-26 04.13.51 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 1252 seconds.
+The average number of active sessions was 4.15.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 4.16		   100%
+Average of all 2 containers:  2 	 2.08		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       2.08		  4.16
+
+Summary of Findings
+-------------------
+   Description	       Active Sessions	    Recommendations
+		       Percent of Activity
+   ------------------  -------------------  ---------------
+1  Top SQL Statements  4.15 | 100	    1
+2  Row Lock Waits      4.11 | 99.25	    1
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Top SQL Statements
+Impact is 4.16 active sessions, 100% of total activity.
+-------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is 4.15 active sessions, 100% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Investigate the UPDATE statement with SQL_ID "4ycv4raa368wv" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID 4ycv4raa368wv.
+	 update hot set counter = counter + 1 where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent only 0% of its database time on CPU, I/O and Cluster
+      waits. Therefore, the SQL Tuning Advisor is not applicable in this case.
+      Look at performance data for the SQL to find potential improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "4ycv4raa368wv" was executed 2751 times and
+      had an average elapsed time of 0.45 seconds.
+   Rationale
+      Waiting for event "enq: TX - row lock contention" in wait class
+      "Application" accounted for 100% of the database time spent in
+      processing the SQL statement with SQL_ID "4ycv4raa368wv".
+
+
+Finding 2: Row Lock Waits
+Impact is 4.13 active sessions, 99.25% of total activity.
+---------------------------------------------------------
+SQL statements were found waiting for row lock waits.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 4.11 active sessions, 99.25% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Significant row contention was detected in the TABLE "LAB.HOT" with
+      object ID 73357. Trace the cause of row contention in the application
+      logic using the given blocked SQL.
+      Related Object
+	 Database object with ID 73357.
+   Rationale
+      The database segment belongs to container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL statement with SQL_ID "4ycv4raa368wv" was blocked on row locks.
+      Related Object
+	 SQL statement with SQL_ID 4ycv4raa368wv.
+	 update hot set counter = counter + 1 where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 213 and serial number 18092 in instance number 1 was
+      the blocking session responsible for 26% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 215 and serial number 4453 in instance number 1 was
+      the blocking session responsible for 24% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 175 and serial number 35310 in instance number 1 was
+      the blocking session responsible for 16% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 60 and serial number 47146 in instance number 1 was
+      the blocking session responsible for 14% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 219 and serial number 53320 in instance number 1 was
+      the blocking session responsible for 10% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Application" was consuming significant database time.
+      Impact is 4.11 active sessions, 99.25% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Commit" was not consuming significant database time.
+Wait class "Concurrency" was not consuming significant database time.
+Wait class "Configuration" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+
+

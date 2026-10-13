@@ -1,0 +1,182 @@
+	  ADDM Report for Task 'so_11_12'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 11 to 12.
+Time period starts at 13-OCT-26 04.14.24 PM
+Time period ends at 13-OCT-26 04.19.25 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 1324 seconds.
+The average number of active sessions was 4.4.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 4.39		   99.77%
+Average of all 2 containers:  2 	 2.2		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       2.2		  4.4
+
+Summary of Findings
+-------------------
+   Description		  Active Sessions      Recommendations
+			  Percent of Activity
+   ---------------------  -------------------  ---------------
+1  Commits and Rollbacks  4 | 90.86	       2
+2  Log File Switches	  .1 | 2.24	       2
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Commits and Rollbacks
+Impact is 4 active sessions, 90.86% of total activity.
+------------------------------------------------------
+Waits on event "log file sync" while performing COMMIT and ROLLBACK operations
+were consuming significant database time.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   1928.79  99.19%
+  1514744704   CDB$ROOT 	2	   16.02    .82%
+  Average of all 2 containers:	2	   972.3    50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  -------
+  3182349174  FREEPDB1	      2 	 964.39 	    1928.78
+  1514744704  CDB$ROOT	      2 	 8.01		    16.02
+
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 4 active sessions, 90.86% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Investigate application logic for possible reduction in the number of
+      COMMIT operations by increasing the size of transactions.
+   Rationale
+      The application was performing 201137 transactions per minute with an
+      average redo size of 593 bytes per transaction.
+
+   Recommendation 2: Host Configuration
+   Estimated benefit is 4 active sessions, 90.86% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Investigate the possibility of improving the performance of I/O to the
+      online redo log files.
+   Rationale
+      The average size of writes to the online redo log files was 1 K and the
+      average time per write was 0 milliseconds.
+   Rationale
+      The total I/O throughput on redo log files was 0 K per second for reads
+      and 1.9 M per second for writes.
+   Rationale
+      The redo log I/O throughput was divided as follows: 0% by RMAN and
+      recovery, 100% by Log Writer, 0% by Archiver, 0% by Streams AQ and 0% by
+      all other activity.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Commit" was consuming significant database time.
+      Impact is 4 active sessions, 90.86% of total activity.
+
+
+Finding 2: Log File Switches
+Impact is .1 active sessions, 2.24% of total activity.
+------------------------------------------------------
+Log file switch operations were consuming significant database time while
+waiting for checkpoint completion.
+This problem can be caused by use of hot backup mode on tablespaces.
+DML to tablespaces in hot backup mode causes generation of additional redo.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   1928.79  99.19%
+  1514744704   CDB$ROOT 	2	   16.02    .82%
+  Average of all 2 containers:	2	   972.3    50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  -------
+  3182349174  FREEPDB1	      2 	 964.39 	    1928.78
+  1514744704  CDB$ROOT	      2 	 8.01		    16.02
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is .1 active sessions, 2.24% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Verify whether incremental shipping was used for standby databases.
+
+   Recommendation 2: Database Configuration
+   Estimated benefit is .1 active sessions, 2.24% of total activity.
+   -----------------------------------------------------------------
+   Action
+      Increase the size of the log files to 2048 M to hold at least 20 minutes
+      of redo information.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Configuration" was consuming significant database time.
+      Impact is .1 active sessions, 2.29% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+Wait class "Concurrency" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+
+

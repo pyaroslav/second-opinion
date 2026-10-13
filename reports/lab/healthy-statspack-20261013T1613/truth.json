@@ -1,0 +1,13 @@
+{
+ "fault": "healthy",
+ "cause": "nothing wrong: light, well-behaved OLTP load",
+ "sessions": 2,
+ "seconds": 300,
+ "snapshots": [
+  21,
+  22
+ ],
+ "started": "2026-10-13T16:13:49+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

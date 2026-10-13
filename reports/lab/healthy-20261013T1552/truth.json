@@ -1,0 +1,12 @@
+{
+ "fault": "healthy",
+ "cause": "nothing wrong: light, well-behaved OLTP load",
+ "sessions": 2,
+ "seconds": 300,
+ "snapshots": [
+  3,
+  4
+ ],
+ "started": "2026-10-13T15:52:08+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)"
+}

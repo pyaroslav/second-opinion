@@ -1,0 +1,13 @@
+{
+ "fault": "hard_parse",
+ "cause": "literal SQL without bind variables causing a hard-parse storm",
+ "sessions": 4,
+ "seconds": 300,
+ "snapshots": [
+  23,
+  31
+ ],
+ "started": "2026-10-13T16:19:11+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}
