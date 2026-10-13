@@ -5,7 +5,10 @@
   "kind": "awr",
   "addm": [
    "commit_storm",
-   "cpu_sql"
+   "cpu_sql",
+   "other",
+   "other",
+   "other"
   ],
   "raw": [
    "commit_storm",
@@ -245,6 +248,8 @@
    "cpu_sql",
    "row_lock",
    "hard_parse",
+   "other",
+   "other",
    "commit_storm"
   ],
   "raw": [
@@ -305,9 +310,11 @@
   "truth": "hard_parse",
   "kind": "awr",
   "addm": [
-   "cpu_sql",
    "cpu_cap",
-   "hard_parse"
+   "hard_parse",
+   "other",
+   "other",
+   "other"
   ],
   "raw": [
    "cpu_cap",
@@ -328,7 +335,7 @@
   "second_retried": false,
   "second_s": 4.3,
   "headline": "Instance CPU Capping and High Hard Parsing are the primary performance bottlenecks.",
-  "addm_pass": false,
+  "addm_pass": true,
   "raw_pass": true,
   "rules_pass": true,
   "second_pass": true
@@ -481,8 +488,9 @@
   "kind": "awr",
   "addm": [
    "commit_storm",
-   "cpu_sql",
-   "seq_nocache"
+   "seq_nocache",
+   "other",
+   "cpu_sql"
   ],
   "raw": [
    "commit_storm",
@@ -503,7 +511,7 @@
   "second_retried": false,
   "second_s": 4.3,
   "headline": "High Log File Sync Wait Time Driven by Frequent Commits and Sequence Contention",
-  "addm_pass": false,
+  "addm_pass": true,
   "raw_pass": false,
   "rules_pass": true,
   "second_pass": true

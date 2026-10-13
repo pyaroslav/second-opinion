@@ -5,7 +5,7 @@
     python lab/score.py --runs reports/test  # the held-out set
 
 Four reviewers see the same report:
-  addm      Oracle's own ADDM report for the same snapshots (keyword-matched to a cause, see ADDM_WORDS)
+  addm      Oracle's own ADDM report for the same snapshots (finding titles mapped to a cause, see ADDM_TITLES)
   raw       Gemma 4 given the raw AWR text (as much as fits), same output format as ours
   rules     our rules alone, ranked by score
   second    rules + Gemma 4 (the tool)
@@ -24,27 +24,25 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from second_opinion import awr, review, rules, statspack  # noqa: E402
 
-ADDM_WORDS = {
-    "hard_parse": ["hard pars", "bind variable", "literal"],
-    "full_scan": ["full table scan", "full scan", "index", "access path"],
-    "row_lock": ["row lock", "enq: tx - row lock", "row contention", "locked"],
-    "commit_storm": ["log file sync", "commit", "redo"],
-    "seq_nocache": ["sequence", "enq: sq", "nocache"],
-    "cpu_sql": ["consuming significant database time", "sql statements consuming", "cpu"],
-    "cpu_cap": ["resource manager", "cpu quantum", "cpu throttl"],
-}
+# ADDM names each finding from a fixed vocabulary, so map its titles, in the order it ranks them.
+# "Top SQL Statements" only says which SQL used the time, not why: it counts as cpu_sql, never as full_scan.
+ADDM_TITLES = [
+    (r"hard parse", "hard_parse"),
+    (r"row lock", "row_lock"),
+    (r"commits and rollbacks", "commit_storm"),
+    (r"sequence", "seq_nocache"),
+    (r"resource manager cpu", "cpu_cap"),
+    (r"top sql", "cpu_sql"),
+]
 
 
 def addm_causes(text: str) -> list[str]:
     if "no findings to report" in text.lower():
         return ["healthy"]
-    # ADDM lists findings in order of impact; keep the order the causes first appear in
     found = []
-    for block in re.split(r"\n\s*Finding \d+", text)[1:]:
-        head = block[:600].lower()
-        for cause, words in ADDM_WORDS.items():
-            if cause not in found and any(w in head for w in words):
-                found.append(cause)
+    for title in re.findall(r"^\s*Finding \d+: (.+)$", text, re.M):
+        cause = next((c for pat, c in ADDM_TITLES if re.search(pat, title.lower())), "other")
+        found.append(cause)
     return found or ["other"]
 
 
@@ -59,7 +57,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default=None)
     ap.add_argument("--runs", default=str(ROOT / "reports" / "lab"))
+    ap.add_argument("--addm-only", action="store_true", help="re-score ADDM in an existing results file; no model calls")
     a = ap.parse_args()
+    if a.addm_only:
+        return rescore_addm(a)
     rows = []
     for run in sorted(Path(a.runs).glob("*/truth.json")):
         d = run.parent
@@ -100,6 +101,21 @@ def main():
             print(f"{kind:9} {k:7} {sum(got)}/{len(got)}" if got else f"{kind:9} {k:7} n/a")
     print("invented numbers  raw:", sum(len(r["raw_unsupported"]) for r in rows),
           " second:", sum(len(r["second_unsupported"]) for r in rows))
+
+
+def rescore_addm(a):
+    out = ROOT / "results" / f"{Path(a.runs).name}-{(a.model or review.MODEL).replace(':', '_')}.json"
+    rows = json.loads(out.read_text())
+    for row in rows:
+        if row["kind"] == "awr":
+            d = Path(a.runs) / row["run"]
+            tj = json.loads((d / "truth.json").read_text())
+            row["addm"] = addm_causes((d / "addm.txt").read_text(errors="replace"))
+            row["addm_pass"] = passed(tj.get("causes", [tj["fault"]]), row["addm"])
+            print(f"{row['truth']:23} addm={row['addm_pass']!s:5} {row['addm']}")
+    out.write_text(json.dumps(rows, indent=1))
+    got = [r["addm_pass"] for r in rows if r["addm_pass"] is not None]
+    print(f"awr       addm    {sum(got)}/{len(got)}")
 
 
 if __name__ == "__main__":
