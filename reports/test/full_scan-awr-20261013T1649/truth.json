@@ -1,0 +1,17 @@
+{
+ "fault": "full_scan",
+ "causes": [
+  "full_scan"
+ ],
+ "cause": "a missing index: the same query full-scans a large table on every call",
+ "sessions": 3,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  21,
+  22
+ ],
+ "started": "2026-10-13T16:49:46+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)",
+ "kind": "awr"
+}

@@ -1,0 +1,17 @@
+{
+ "fault": "commit_storm",
+ "causes": [
+  "commit_storm"
+ ],
+ "cause": "commit after every single-row insert: log file sync waits",
+ "sessions": 10,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  64,
+  65
+ ],
+ "started": "2026-10-13T17:20:53+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

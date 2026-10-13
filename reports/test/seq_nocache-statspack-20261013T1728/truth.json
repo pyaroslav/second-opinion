@@ -1,0 +1,17 @@
+{
+ "fault": "seq_nocache",
+ "causes": [
+  "seq_nocache"
+ ],
+ "cause": "a NOCACHE ORDER sequence used by many concurrent sessions (sequence/enqueue contention)",
+ "sessions": 12,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  66,
+  67
+ ],
+ "started": "2026-10-13T17:28:13+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

@@ -1,0 +1,17 @@
+{
+ "fault": "commit_storm",
+ "causes": [
+  "commit_storm"
+ ],
+ "cause": "commit after every single-row insert: log file sync waits",
+ "sessions": 10,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  25,
+  26
+ ],
+ "started": "2026-10-13T17:04:52+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)",
+ "kind": "awr"
+}

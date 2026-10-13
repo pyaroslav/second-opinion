@@ -1,0 +1,147 @@
+	  ADDM Report for Task 'so_21_22'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 21 to 22.
+Time period starts at 13-OCT-26 04.49.45 PM
+Time period ends at 13-OCT-26 04.56.46 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 1170 seconds.
+The average number of active sessions was 2.78.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 2.77		   99.64%
+Average of all 2 containers:  2 	 1.39		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       1.39		  2.78
+
+Summary of Findings
+-------------------
+   Description			    Active Sessions	 Recommendations
+				    Percent of Activity
+   -------------------------------  -------------------  ---------------
+1  Top SQL Statements		    1.86 | 66.97	 1
+2  Resource Manager CPU Throttling  .79 | 28.54 	 1
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Top SQL Statements
+Impact is 1.86 active sessions, 66.97% of total activity.
+---------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is 1.86 active sessions, 66.97% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the SELECT statement with SQL_ID
+      "2grnmyh5m7rj1".
+      Related Object
+	 SQL statement with SQL_ID 2grnmyh5m7rj1.
+	 select id, region from customers where email = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent 100% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "2grnmyh5m7rj1" was executed 268606 times and
+      had an average elapsed time of 0.003 seconds.
+
+
+Finding 2: Resource Manager CPU Throttling
+Impact is .79 active sessions, 28.54% of total activity.
+--------------------------------------------------------
+CPU Resource Manager is enabled and database sessions were found waiting for
+CPU.
+
+  Top containers waiting for CPU (by Avg. Active Sessions)
+  --------------------------------------------------------
+  DBID	       Container Name	Allocated  Avg. Active Sess  Percent
+				CPUs			     of Total
+  -----------  ---------------	---------  ----------------  --------
+  3182349174   FREEPDB1 	2	   .79		     100%
+  Average of all 2 containers:	2	   .4		     50%
+
+
+  Top containers waiting for CPU per Allocated CPU
+  ------------------------------------------------
+  DBID	      Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  ----------------
+  3182349174  FREEPDB1	      2 	 .4		    .8
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is .79 active sessions, 28.54% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Session CPU consumption was throttled by the Oracle Resource Manager.
+      Consider revising the resource plan that was active during the analysis
+      period.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Scheduler" was consuming significant database time.
+      Impact is .79 active sessions, 28.54% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+Wait class "Commit" was not consuming significant database time.
+Wait class "Concurrency" was not consuming significant database time.
+Wait class "Configuration" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+
+

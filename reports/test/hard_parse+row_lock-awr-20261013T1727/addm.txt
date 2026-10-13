@@ -1,0 +1,277 @@
+	  ADDM Report for Task 'so_31_32'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 31 to 32.
+Time period starts at 13-OCT-26 05.27.28 PM
+Time period ends at 13-OCT-26 05.34.30 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 1527 seconds.
+The average number of active sessions was 3.62.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 3.61		   99.72%
+Average of all 2 containers:  2 	 1.81		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       1.81		  3.62
+
+Summary of Findings
+-------------------
+   Description		  Active Sessions      Recommendations
+			  Percent of Activity
+   ---------------------  -------------------  ---------------
+1  Top SQL Statements	  1.76 | 48.59	       1
+2  Row Lock Waits	  1.73 | 47.88	       1
+3  Hard Parse		  1.02 | 28.22	       0
+4  Soft Parse		  .47 | 12.86	       2
+5  Shared Pool Latches	  .11 | 3.11	       0
+6  Commits and Rollbacks  .11 | 3	       1
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Top SQL Statements
+Impact is 1.76 active sessions, 48.59% of total activity.
+---------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is 1.76 active sessions, 48.59% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate the UPDATE statement with SQL_ID "fqtn59b8d6u0p" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID fqtn59b8d6u0p.
+	 update orders set status = 'PAID' where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent only 0% of its database time on CPU, I/O and Cluster
+      waits. Therefore, the SQL Tuning Advisor is not applicable in this case.
+      Look at performance data for the SQL to find potential improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "fqtn59b8d6u0p" was executed 1886 times and
+      had an average elapsed time of 0.38 seconds.
+   Rationale
+      Waiting for event "enq: TX - row lock contention" in wait class
+      "Application" accounted for 100% of the database time spent in
+      processing the SQL statement with SQL_ID "fqtn59b8d6u0p".
+
+
+Finding 2: Row Lock Waits
+Impact is 1.73 active sessions, 47.88% of total activity.
+---------------------------------------------------------
+SQL statements were found waiting for row lock waits.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 1.73 active sessions, 47.88% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Significant row contention was detected in the TABLE "LAB.ORDERS" with
+      object ID 73351. Trace the cause of row contention in the application
+      logic using the given blocked SQL.
+      Related Object
+	 Database object with ID 73351.
+   Rationale
+      The database segment belongs to container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL statement with SQL_ID "fqtn59b8d6u0p" was blocked on row locks.
+      Related Object
+	 SQL statement with SQL_ID fqtn59b8d6u0p.
+	 update orders set status = 'PAID' where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 220 and serial number 6273 in instance number 1 was
+      the blocking session responsible for 37% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 41 and serial number 207 in instance number 1 was
+      the blocking session responsible for 24% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 66 and serial number 17566 in instance number 1 was
+      the blocking session responsible for 20% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The session with ID 175 and serial number 21651 in instance number 1 was
+      the blocking session responsible for 17% of this recommendation's
+      benefit.
+   Rationale
+      The session was active in container FREEPDB1 with database ID
+      3182349174.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Application" was consuming significant database time.
+      Impact is 1.73 active sessions, 47.88% of total activity.
+
+
+Finding 3: Hard Parse
+Impact is 1.02 active sessions, 28.22% of total activity.
+---------------------------------------------------------
+Hard parsing of SQL statements was consuming significant database time.
+Hard parses due to cursor environment mismatch were not consuming significant
+database time.
+Hard parsing SQL statements that encountered parse errors was not consuming
+significant database time.
+Hard parses due to literal usage and cursor invalidation were not consuming
+significant database time.
+
+   No recommendations are available.
+
+
+Finding 4: Soft Parse
+Impact is .47 active sessions, 12.86% of total activity.
+--------------------------------------------------------
+Soft parsing of SQL statements was consuming significant database time.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is .47 active sessions, 12.86% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Investigate application logic to keep open the frequently used cursors.
+      Note that cursors are closed by both cursor close calls and session
+      disconnects.
+
+   Recommendation 2: Database Configuration
+   Estimated benefit is .47 active sessions, 12.86% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Consider increasing the session cursor cache size by increasing the
+      value of parameter "session_cached_cursors".
+   Rationale
+      The value of parameter "session_cached_cursors" was "50" during the
+      analysis period.
+
+
+Finding 5: Shared Pool Latches
+Impact is .11 active sessions, 3.11% of total activity.
+-------------------------------------------------------
+Contention for latches related to the shared pool was consuming significant
+database time.
+Waits for "latch: shared pool" amounted to 3% of database time.
+
+   No recommendations are available.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Concurrency" was consuming significant database time.
+      Impact is .11 active sessions, 3.12% of total activity.
+
+
+Finding 6: Commits and Rollbacks
+Impact is .11 active sessions, 3% of total activity.
+----------------------------------------------------
+Waits on event "log file sync" while performing COMMIT and ROLLBACK operations
+were consuming significant database time.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   1487.05  99.05%
+  1514744704   CDB$ROOT 	2	   14.42    .96%
+  Average of all 2 containers:	2	   750.67   50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  -------
+  3182349174  FREEPDB1	      2 	 743.52 	    1487.04
+  1514744704  CDB$ROOT	      2 	 7.21		    14.42
+
+
+   Recommendation 1: Host Configuration
+   Estimated benefit is .11 active sessions, 3% of total activity.
+   ---------------------------------------------------------------
+   Action
+      Investigate the possibility of improving the performance of I/O to the
+      online redo log files.
+   Rationale
+      The average size of writes to the online redo log files was 27 K and the
+      average time per write was 1 milliseconds.
+   Rationale
+      The total I/O throughput on redo log files was 0 K per second for reads
+      and 1.3 M per second for writes.
+   Rationale
+      The redo log I/O throughput was divided as follows: 0% by RMAN and
+      recovery, 100% by Log Writer, 0% by Archiver, 0% by Streams AQ and 0% by
+      all other activity.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Commit" was consuming significant database time.
+      Impact is .11 active sessions, 3% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Configuration" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+
+
+

@@ -1,0 +1,18 @@
+{
+ "fault": "full_scan+commit_storm",
+ "causes": [
+  "full_scan",
+  "commit_storm"
+ ],
+ "cause": "a missing index: the same query full-scans a large table on every call; commit after every single-row insert: log file sync waits",
+ "sessions": 8,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  72,
+  73
+ ],
+ "started": "2026-10-13T17:50:17+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

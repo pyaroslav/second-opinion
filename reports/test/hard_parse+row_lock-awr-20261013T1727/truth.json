@@ -1,0 +1,18 @@
+{
+ "fault": "hard_parse+row_lock",
+ "causes": [
+  "hard_parse",
+  "row_lock"
+ ],
+ "cause": "literal SQL without bind variables causing a hard-parse storm; row lock contention: sessions queue on the same rows (enq: TX - row lock contention)",
+ "sessions": 7,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  31,
+  32
+ ],
+ "started": "2026-10-13T17:27:28+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)",
+ "kind": "awr"
+}

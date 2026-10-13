@@ -1,0 +1,17 @@
+{
+ "fault": "row_lock",
+ "causes": [
+  "row_lock"
+ ],
+ "cause": "row lock contention: sessions queue on the same rows (enq: TX - row lock contention)",
+ "sessions": 4,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  62,
+  63
+ ],
+ "started": "2026-10-13T17:13:31+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

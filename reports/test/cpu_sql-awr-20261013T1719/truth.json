@@ -1,0 +1,17 @@
+{
+ "fault": "cpu_sql",
+ "causes": [
+  "cpu_sql"
+ ],
+ "cause": "one badly written SQL statement burning CPU (a cartesian join)",
+ "sessions": 2,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  29,
+  30
+ ],
+ "started": "2026-10-13T17:19:57+00:00",
+ "database": "Oracle AI Database 26ai Free 23.26.3 (container)",
+ "kind": "awr"
+}

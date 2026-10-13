@@ -1,0 +1,17 @@
+{
+ "fault": "full_scan",
+ "causes": [
+  "full_scan"
+ ],
+ "cause": "a missing index: the same query full-scans a large table on every call",
+ "sessions": 3,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  51,
+  61
+ ],
+ "started": "2026-10-13T17:06:09+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

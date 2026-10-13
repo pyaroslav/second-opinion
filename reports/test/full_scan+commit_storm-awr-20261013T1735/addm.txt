@@ -1,0 +1,234 @@
+	  ADDM Report for Task 'so_33_34'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 33 to 34.
+Time period starts at 13-OCT-26 05.35.00 PM
+Time period ends at 13-OCT-26 05.42.01 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 2722 seconds.
+The average number of active sessions was 6.47.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 6.46		   99.85%
+Average of all 2 containers:  2 	 3.24		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       3.23		  6.46
+
+Summary of Findings
+-------------------
+   Description			    Active Sessions	 Recommendations
+				    Percent of Activity
+   -------------------------------  -------------------  ---------------
+1  Commits and Rollbacks	    3.29 | 50.95	 2
+2  Top SQL Statements		    1.88 | 29.13	 2
+3  Resource Manager CPU Throttling  1.2 | 18.63 	 1
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Commits and Rollbacks
+Impact is 3.29 active sessions, 50.95% of total activity.
+---------------------------------------------------------
+Waits on event "log file sync" while performing COMMIT and ROLLBACK operations
+were consuming significant database time.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   1714.83  99.28%
+  1514744704   CDB$ROOT 	2	   12.38    .72%
+  Average of all 2 containers:	2	   863.63   50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  -------
+  3182349174  FREEPDB1	      2 	 857.42 	    1714.84
+  1514744704  CDB$ROOT	      2 	 6.19		    12.38
+
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 3.29 active sessions, 50.95% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate application logic for possible reduction in the number of
+      COMMIT operations by increasing the size of transactions.
+   Rationale
+      The application was performing 166179 transactions per minute with an
+      average redo size of 638 bytes per transaction.
+
+   Recommendation 2: Host Configuration
+   Estimated benefit is 3.29 active sessions, 50.95% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate the possibility of improving the performance of I/O to the
+      online redo log files.
+   Rationale
+      The average size of writes to the online redo log files was 1 K and the
+      average time per write was 0 milliseconds.
+   Rationale
+      The total I/O throughput on redo log files was 0 K per second for reads
+      and 1.9 M per second for writes.
+   Rationale
+      The redo log I/O throughput was divided as follows: 0% by RMAN and
+      recovery, 100% by Log Writer, 0% by Archiver, 0% by Streams AQ and 0% by
+      all other activity.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Commit" was consuming significant database time.
+      Impact is 3.29 active sessions, 50.95% of total activity.
+
+
+Finding 2: Top SQL Statements
+Impact is 1.88 active sessions, 29.13% of total activity.
+---------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is 1.53 active sessions, 23.62% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the SELECT statement with SQL_ID
+      "2grnmyh5m7rj1".
+      Related Object
+	 SQL statement with SQL_ID 2grnmyh5m7rj1.
+	 select id, region from customers where email = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent 100% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "2grnmyh5m7rj1" was executed 199553 times and
+      had an average elapsed time of 0.0032 seconds.
+
+   Recommendation 2: SQL Tuning
+   Estimated benefit is .36 active sessions, 5.51% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Investigate the UPDATE statement with SQL_ID "ap58c5mjhawvj" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID ap58c5mjhawvj.
+	 update counters set n = n + 1 where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent only 7% of its database time on CPU, I/O and Cluster
+      waits. Therefore, the SQL Tuning Advisor is not applicable in this case.
+      Look at performance data for the SQL to find potential improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "ap58c5mjhawvj" was executed 1165502 times and
+      had an average elapsed time of 0.000088 seconds.
+   Rationale
+      Waiting for event "buffer busy waits" in wait class "Concurrency"
+      accounted for 64% of the database time spent in processing the SQL
+      statement with SQL_ID "ap58c5mjhawvj".
+
+
+Finding 3: Resource Manager CPU Throttling
+Impact is 1.2 active sessions, 18.63% of total activity.
+--------------------------------------------------------
+CPU Resource Manager is enabled and database sessions were found waiting for
+CPU.
+
+  Top containers waiting for CPU (by Avg. Active Sessions)
+  --------------------------------------------------------
+  DBID	       Container Name	Allocated  Avg. Active Sess  Percent
+				CPUs			     of Total
+  -----------  ---------------	---------  ----------------  --------
+  3182349174   FREEPDB1 	2	   1.2		     100%
+  Average of all 2 containers:	2	   .6		     50%
+
+
+  Top containers waiting for CPU per Allocated CPU
+  ------------------------------------------------
+  DBID	      Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  ----------------
+  3182349174  FREEPDB1	      2 	 .6		    1.2
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is 1.2 active sessions, 18.63% of total activity.
+   -------------------------------------------------------------------
+   Action
+      Session CPU consumption was throttled by the Oracle Resource Manager.
+      Consider revising the resource plan that was active during the analysis
+      period.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Scheduler" was consuming significant database time.
+      Impact is 1.2 active sessions, 18.63% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+Wait class "Concurrency" was not consuming significant database time.
+Wait class "Configuration" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+
+

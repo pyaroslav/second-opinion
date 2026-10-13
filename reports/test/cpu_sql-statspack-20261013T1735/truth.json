@@ -1,0 +1,17 @@
+{
+ "fault": "cpu_sql",
+ "causes": [
+  "cpu_sql"
+ ],
+ "cause": "one badly written SQL statement burning CPU (a cartesian join)",
+ "sessions": 2,
+ "seconds": 420,
+ "set": "test",
+ "snapshots": [
+  68,
+  69
+ ],
+ "started": "2026-10-13T17:35:34+00:00",
+ "database": "Oracle Database 12.2.0.1 Standard Edition 2 (container), Statspack level 7",
+ "kind": "statspack"
+}

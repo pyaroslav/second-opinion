@@ -1,0 +1,303 @@
+	  ADDM Report for Task 'so_25_26'
+	  -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 25 to 26.
+Time period starts at 13-OCT-26 05.04.52 PM
+Time period ends at 13-OCT-26 05.11.53 PM
+
+Analysis Target
+---------------
+Database 'FREE' with DB ID 1514744704.
+Database version 23.0.0.0.0.
+Analysis was requested for all instances, but ADDM analyzed instance FREE,
+numbered 1 and hosted at 5c63e1051e15.
+See the "Additional Information" section for more information on the requested
+instances.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 2948 seconds.
+The average number of active sessions was 7.
+ADDM analyzed 1 of the requested 1 instances.
+
+
+Top containers by Avg. Active Sessions
+--------------------------------------
+DBID	     Container Name   Allocated  Avg. Active Sess  Percent
+			      CPUs			   of Total
+-----------  ---------------  ---------  ----------------  --------
+3182349174   FREEPDB1	      2 	 7		   100%
+Average of all 2 containers:  2 	 3.5		   50%
+
+
+Top containers by Avg. Active Sessions per Allocated CPU
+--------------------------------------------------------
+DBID	    Container Name  Allocated  Avg. Active Sess   Avg. Active Sess
+			    CPUs       per Allocated CPU
+----------  --------------  ---------  -----------------  ----------------
+3182349174  FREEPDB1	    2	       3.5		  7
+
+Summary of Findings
+-------------------
+   Description		      Active Sessions	   Recommendations
+			      Percent of Activity
+   -------------------------  -------------------  ---------------
+1  Commits and Rollbacks      6.03 | 86.04	   2
+2  Top SQL Statements	      .65 | 9.35	   1
+3  Buffer Busy - Hot Objects  .32 | 4.55	   1
+4  Buffer Busy - Hot Block    .28 | 3.95	   2
+5  Log File Switches	      .14 | 2		   2
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+	  Findings and Recommendations
+	  ----------------------------
+
+Finding 1: Commits and Rollbacks
+Impact is 6.03 active sessions, 86.04% of total activity.
+---------------------------------------------------------
+Waits on event "log file sync" while performing COMMIT and ROLLBACK operations
+were consuming significant database time.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   3183.11  99.58%
+  1514744704   CDB$ROOT 	2	   13.56    .42%
+  Average of all 2 containers:	2	   1598.34  50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  ------
+  3182349174  FREEPDB1	      2 	 1591.55	    3183.1
+  1514744704  CDB$ROOT	      2 	 6.78		    13.56
+
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is 6.03 active sessions, 86.04% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate application logic for possible reduction in the number of
+      COMMIT operations by increasing the size of transactions.
+   Rationale
+      The application was performing 311276 transactions per minute with an
+      average redo size of 630 bytes per transaction.
+
+   Recommendation 2: Host Configuration
+   Estimated benefit is 6.03 active sessions, 86.04% of total activity.
+   --------------------------------------------------------------------
+   Action
+      Investigate the possibility of improving the performance of I/O to the
+      online redo log files.
+   Rationale
+      The average size of writes to the online redo log files was 3 K and the
+      average time per write was 0 milliseconds.
+   Rationale
+      The total I/O throughput on redo log files was 2.4 K per second for
+      reads and 3.4 M per second for writes.
+   Rationale
+      The redo log I/O throughput was divided as follows: 0% by RMAN and
+      recovery, 100% by Log Writer, 0% by Archiver, 0% by Streams AQ and 0% by
+      all other activity.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Commit" was consuming significant database time.
+      Impact is 6.03 active sessions, 86.04% of total activity.
+
+
+Finding 2: Top SQL Statements
+Impact is .65 active sessions, 9.35% of total activity.
+-------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is .65 active sessions, 9.35% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Investigate the UPDATE statement with SQL_ID "ap58c5mjhawvj" for
+      possible performance improvements. You can supplement the information
+      given here with an ASH report for this SQL_ID.
+      Related Object
+	 SQL statement with SQL_ID ap58c5mjhawvj.
+	 update counters set n = n + 1 where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL spent only 23% of its database time on CPU, I/O and Cluster
+      waits. Therefore, the SQL Tuning Advisor is not applicable in this case.
+      Look at performance data for the SQL to find potential improvements.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "ap58c5mjhawvj" was executed 2182998 times and
+      had an average elapsed time of 0.00012 seconds.
+   Rationale
+      Waiting for event "buffer busy waits" in wait class "Concurrency"
+      accounted for 57% of the database time spent in processing the SQL
+      statement with SQL_ID "ap58c5mjhawvj".
+
+
+Finding 3: Buffer Busy - Hot Objects
+Impact is .32 active sessions, 4.55% of total activity.
+-------------------------------------------------------
+Read and write contention on database blocks was consuming significant
+database time.
+
+   Recommendation 1: Schema Changes
+   Estimated benefit is .32 active sessions, 4.55% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Consider rebuilding the TABLE "LAB.COUNTERS" with object ID 73366 using
+      a higher value for PCTFREE.
+      Related Object
+	 Database object with ID 73366.
+   Rationale
+      The database segment belongs to container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The UPDATE statement with SQL_ID "ap58c5mjhawvj" was significantly
+      affected by "buffer busy" waits.
+      Related Object
+	 SQL statement with SQL_ID ap58c5mjhawvj.
+	 update counters set n = n + 1 where id = :1
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Read and write contention on database blocks was consuming significant
+      database time.
+      Impact is .32 active sessions, 4.55% of total activity.
+	 Wait class "Concurrency" was consuming significant database time.
+	 Impact is .33 active sessions, 4.69% of total activity.
+
+
+Finding 4: Buffer Busy - Hot Block
+Impact is .28 active sessions, 3.95% of total activity.
+-------------------------------------------------------
+A hot data block with concurrent read and write activity was found. The block
+belongs to segment "LAB.COUNTERS" and is block 97964 in file 24.
+The database block belongs to container FREEPDB1 with database ID 3182349174.
+
+   Recommendation 1: Application Analysis
+   Estimated benefit is .28 active sessions, 3.95% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Investigate application logic to find the cause of high concurrent read
+      and write activity to the data present in this block.
+      Related Object
+	 Database block with object number 73366, file number 24 and block
+	 number 97964.
+   Rationale
+      The database block belongs to container FREEPDB1 with database ID
+      3182349174.
+   Rationale
+      The SQL statement with SQL_ID "ap58c5mjhawvj" spent significant time on
+      "buffer busy" waits for the hot block.
+      Related Object
+	 SQL statement with SQL_ID ap58c5mjhawvj.
+	 update counters set n = n + 1 where id = :1
+   Rationale
+      The SQL statement executed in container FREEPDB1 with database ID
+      3182349174.
+
+   Recommendation 2: Schema Changes
+   Estimated benefit is .28 active sessions, 3.95% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Consider rebuilding the TABLE "LAB.COUNTERS" with object ID 73366 using
+      a higher value for PCTFREE.
+      Related Object
+	 Database object with ID 73366.
+   Rationale
+      The database block belongs to container FREEPDB1 with database ID
+      3182349174.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Read and write contention on database blocks was consuming significant
+      database time.
+      Impact is .32 active sessions, 4.55% of total activity.
+	 Wait class "Concurrency" was consuming significant database time.
+	 Impact is .33 active sessions, 4.69% of total activity.
+
+
+Finding 5: Log File Switches
+Impact is .14 active sessions, 2% of total activity.
+----------------------------------------------------
+Log file switch operations were consuming significant database time while
+waiting for checkpoint completion.
+This problem can be caused by use of hot backup mode on tablespaces.
+DML to tablespaces in hot backup mode causes generation of additional redo.
+
+  Top containers by Redo Generated in KB/sec
+  ------------------------------------------
+  DBID	       Container Name	Allocated  KB/sec   Percent
+				CPUs		    of Total
+  -----------  ---------------	---------  -------  --------
+  3182349174   FREEPDB1 	2	   3183.11  99.58%
+  1514744704   CDB$ROOT 	2	   13.56    .42%
+  Average of all 2 containers:	2	   1598.34  50%
+
+
+  Top containers by Redo Generated in KB/sec per Allocated CPU
+  ------------------------------------------------------------
+  DBID	      Container Name  Allocated  KB/sec 	    KB/sec
+			      CPUs	 per Allocated CPU
+  ----------  --------------  ---------  -----------------  ------
+  3182349174  FREEPDB1	      2 	 1591.55	    3183.1
+  1514744704  CDB$ROOT	      2 	 6.78		    13.56
+
+
+   Recommendation 1: Database Configuration
+   Estimated benefit is .14 active sessions, 2% of total activity.
+   ---------------------------------------------------------------
+   Action
+      Verify whether incremental shipping was used for standby databases.
+
+   Recommendation 2: Database Configuration
+   Estimated benefit is .14 active sessions, 2% of total activity.
+   ---------------------------------------------------------------
+   Action
+      Increase the size of the log files to 2048 M to hold at least 20 minutes
+      of redo information.
+
+   Symptoms That Led to the Finding:
+   ---------------------------------
+      Wait class "Configuration" was consuming significant database time.
+      Impact is .14 active sessions, 2% of total activity.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	  Additional Information
+	  ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
+
+
