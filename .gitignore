@@ -3,3 +3,5 @@ __pycache__/
 .venv/
 .pytest_cache/
 reports/*.log
+.venv-tinker/
+reports/train/
