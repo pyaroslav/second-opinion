@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from second_opinion import awr, review, rules, statspack
+from second_opinion import awr, review, rules, statspack, text
 
 LAB = Path(__file__).resolve().parents[1] / "reports" / "lab"
 
@@ -56,3 +56,32 @@ def test_numbers_the_model_was_not_given_are_caught():
     assert review.unsupported("about 3971 per second", allowed) == []   # rounding of a given number
     assert review.unsupported("this costs 42.5% of DB time", allowed) == [42.5]
     assert review.unsupported("first do 2 things", allowed) == []      # small counts are prose
+
+
+@pytest.mark.parametrize("fault", ["hard_parse", "full_scan", "row_lock", "commit_storm", "seq_nocache", "cpu_sql", "healthy"])
+def test_awr_text_gives_the_same_findings_as_awr_html(fault):
+    run = one(f"{fault}-2*/awr.txt").parent
+    html = [(f["cause"], f["score"]) for f in rules.check(awr.parse(run / "awr.html"))]
+    txt = [(f["cause"], f["score"]) for f in rules.check(text.parse(run / "awr.txt"))]
+    assert txt == html
+
+
+def test_a_pasted_top_events_section_is_enough(tmp_path):
+    # what people paste into a forum: one section, 11g layout, two-word wait class
+    p = tmp_path / "paste.txt"
+    p.write_text("Top 5 Timed Foreground Events\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
+                 "                                                           Avg\n"
+                 "                                                          wait   % DB\n"
+                 "Event                                 Waits     Time(s)   (ms)   time Wait Class\n"
+                 "------------------------------ ------------ ----------- ------ ------ ----------\n"
+                 "direct path read                  3,464,056       6,593      2   33.5 User I/O\n"
+                 "DB CPU                                            3,503          17.8\n")
+    d = text.parse(p)
+    assert [e["event"] for e in d["top_events"]] == ["direct path read", "DB CPU"]
+    assert d["top_events"][0]["wait_class"] == "User I/O"
+    found = rules.check(d)
+    assert found[0]["cause"] == "full_scan"  # no DB time in the paste: judged on the percentages alone
+
+
+def test_sqlplus_scientific_notation_is_a_number():
+    assert text._f("6.50139E+08") == 650139000.0

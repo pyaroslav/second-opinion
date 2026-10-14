@@ -10,12 +10,13 @@ local Ollama. Every number in the review is checked against the report before it
 """
 
 import argparse
+import re
 import json
 import sys
 import time
 from pathlib import Path
 
-from . import awr, review, rules, statspack, tracing
+from . import awr, review, rules, statspack, text, tracing
 
 LABELS = {"hard_parse": "Hard parsing (literal SQL, no binds)", "full_scan": "Full scans / missing index",
           "row_lock": "Row lock contention", "commit_storm": "Committing too often (log file sync)",
@@ -24,13 +25,19 @@ LABELS = {"hard_parse": "Hard parsing (literal SQL, no binds)", "full_scan": "Fu
 
 
 def load(path: Path) -> dict:
-    head = path.read_text(errors="replace")[:4000]
-    if "STATSPACK report for" in head:
-        return statspack.parse(path)
+    body = path.read_text(errors="replace")
+    head = body[:4000]
     if "<html" in head.lower() or "<table" in head.lower():
         return awr.parse(path)
-    raise SystemExit(f"{path}: not an AWR HTML or Statspack text report. "
-                     "For AWR, run awrrpt.sql and choose html.")
+    if "STATSPACK report for" in head:
+        d = statspack.parse(path)
+        if d.get("top_events") and d.get("load_profile"):
+            return d
+        return text.parse(path)  # an older layout the 12.2 reader doesn't know
+    if re.search(r"Load Profile|Top \d+ (Timed|Foreground)|WORKLOAD REPOSITORY", body, re.I):
+        return text.parse(path)  # AWR text, or sections pasted from a report
+    raise SystemExit(f"{path}: not an AWR or Statspack report (HTML or text), and no Load Profile or "
+                     "Top events section found.")
 
 
 def render(path: Path, d: dict, found: list[dict], r: dict | None, secs: float) -> str:

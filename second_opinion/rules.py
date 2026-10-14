@@ -69,6 +69,17 @@ def check(d: dict) -> list[dict]:
             **({"most_scanned_table": seg.get("Object Name")} if seg.get("Object Name") else {}),
             sql_text=(g.get("text") or "")[:160])
 
+    # 2b. full scans read from disk: multiblock reads ('db file scattered read', or 'direct path read'
+    #     for serial direct reads since 11g) taking a large share of the time. In the lab the tables fit
+    #     in the buffer cache, so this never fired there; on real systems it is the classic sign.
+    #     (Added after reading public forum reports; see README.)
+    e = _event(d, "db file scattered read", "direct path read")
+    if e and (e.get("pct_db_time") or 0) >= 20 and not any(x["cause"] == "full_scan" for x in f):
+        add("full_scan", min(1.0, e["pct_db_time"] / 50 + 0.2),
+            "A large share of time goes to multiblock reads: full table scans read from disk, usually a missing "
+            "index or a query that can't use one.",
+            event=e["event"], event_pct_db_time=e["pct_db_time"], avg_wait=e.get("avg_wait"))
+
     # 3. row lock contention
     e = _event(d, "enq: tx - row lock contention")
     if e and (e.get("pct_db_time") or 0) >= 5:
@@ -114,13 +125,35 @@ def check(d: dict) -> list[dict]:
             "Sessions wait for CPU that Resource Manager will not give them (resmgr:cpu quantum): the instance is CPU-capped.",
             event_pct_db_time=e["pct_db_time"], avg_active_sessions=aas, host_cpus=cpus)
 
+    # a wait none of the checks above explains, taking a large share of the time: say so rather than
+    # call the database healthy (e.g. single-block reads growing with the data, log switch waits)
+    explained = {"db cpu", "cpu time", "resmgr:cpu quantum"} | {
+        (x["evidence"].get("event") or "").lower() for x in f}
+    covered = {"hard_parse": ("latch: shared pool", "library cache", "row cache", "cursor: "),
+               "row_lock": ("enq: tx - row lock",), "commit_storm": ("log file sync",),
+               "seq_nocache": ("enq: sq", "row cache", "enq: sv"), "full_scan": ("db file scattered", "direct path read")}
+    fired = {x["cause"] for x in f}
+    for e in d.get("top_events") or []:
+        name = e["event"].lower()
+        if name in explained or any(name.startswith(p) for c in fired for p in covered.get(c, ())):
+            continue
+        if (e.get("pct_db_time") or 0) >= 25:
+            add("other", min(1.0, e["pct_db_time"] / 60),
+                f"'{e['event']}' takes a large share of the time and none of the standard checks explains it: "
+                "look at it directly.", event=e["event"], event_pct_db_time=e["pct_db_time"], avg_wait=e.get("avg_wait"))
+        break  # only the biggest unexplained wait
+
     # a percentage of almost nothing is nothing: below MIN_AAS average active sessions the
     # database is mostly idle, and "74% of DB time is log file sync" is a few milliseconds a second
-    if aas < MIN_AAS:
+    # an excerpt or a 9i Statspack may not show DB time at all: then we can't tell busy from idle,
+    # so we don't pretend to; the findings stand on their percentages alone
+    known = "DB Time(s)" in (d.get("load_profile") or {})
+    if known and aas < MIN_AAS:
         for x in f:
             x["score"] = round(x["score"] * 0.3, 2)
             x["evidence"]["avg_active_sessions"] = aas
     if not [x for x in f if x["cause"] != "cpu_cap" and x["score"] >= 0.4]:
-        add("healthy", 0.5 if aas < 1 else 0.3,
-            "No dominant problem: no wait event or statement stands out.", avg_active_sessions=aas)
+        add("healthy", 0.5 if known and aas < 1 else 0.3,
+            "No dominant problem: no wait event or statement stands out.",
+            **({"avg_active_sessions": aas} if known else {"db_time": "not in this report"}))
     return sorted(f, key=lambda x: -x["score"])
