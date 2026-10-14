@@ -5,3 +5,4 @@ __pycache__/
 reports/*.log
 .venv-tinker/
 reports/train/
+reports/public/
