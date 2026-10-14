@@ -42,7 +42,7 @@ The diagnosis is right, and so are the numbers. The second suggestion in the not
 
 ## How it works
 
-1. **Parse.** `second_opinion/awr.py` reads AWR HTML, and `second_opinion/statspack.py` reads Statspack text. Both produce the same small dict: load profile, top timed events, time model, instance activity, top SQL by elapsed time, CPU, gets, reads and executions, plus segment statistics. A raw AWR report is roughly 18k tokens, more than a small local model handles well. The dict is a fraction of that.
+1. **Parse.** `second_opinion/awr.py` reads AWR HTML, and `second_opinion/statspack.py` reads 12.2-style Statspack text. `second_opinion/text.py` reads everything else: AWR text, Statspack from older releases, and partial pastes, token by token, because pasted whitespace is often mangled. On all 32 lab runs it gives exactly the same findings as the HTML and Statspack parsers (`tests/test_core.py`). Both produce the same small dict: load profile, top timed events, time model, instance activity, top SQL by elapsed time, CPU, gets, reads and executions, plus segment statistics. A raw AWR report is roughly 18k tokens, more than a small local model handles well. The dict is a fraction of that.
 2. **Rules.** `second_opinion/rules.py` scores the causes a DBA checks first:
    - hard parsing
    - full scans or a missing index
@@ -64,7 +64,9 @@ The rules and the number check do not depend on the model. `--no-gemma` prints t
 pip install -e .                 # Python 3.10+
 ollama pull gemma4:e4b
 second-opinion awrrpt_10_11.html                 # AWR, HTML as awrrpt.sql writes it
-second-opinion sp_10_11.lst                      # Statspack, text as spreport.sql writes it
+second-opinion sp_10_11.lst                      # Statspack, text as spreport.sql writes it (any release)
+second-opinion awrrpt_10_11.txt                  # AWR text
+second-opinion pasted.txt                        # just the sections someone pasted (Load Profile, Top events, ...)
 second-opinion report.html --out review.md       # also save the review
 second-opinion report.html --json                # machine-readable
 second-opinion report.html --no-gemma            # rules only, no model
@@ -128,6 +130,14 @@ There were 14 runs: 7 AWR and 7 Statspack, each 5 minutes long. The rules were d
 | Second Opinion | 7/7 | 7/7 |
 
 On the dev set, raw Gemma stated one number that wasn't in its input; Second Opinion stated none.
+
+### Public reports (worked examples, not a test)
+
+I collected ten AWR and Statspack reports posted publicly on the OraFAQ forums and Jonathan Lewis's blog, each with an expert's diagnosis in the thread. All ten are text (Oracle 9i–11g), and many are a few pasted sections. They exposed two gaps:
+- Full scans from disk (`db file scattered read` / `direct path read`) never occur in the lab, where the tables fit in the buffer cache, so the rules didn't check for them.
+- A dominant wait that no check explains was reported as "healthy".
+
+Both checks were added *after* reading these cases. With them, the rules match the expert on 7 of 10. The three misses are two excerpts without the SQL sections the diagnosis needs, and a log-switch problem below the threshold. Because the checks were written with these cases in view, they're worked examples, not an accuracy figure. The reports aren't redistributed here; the thread links are in the post.
 
 ## Limits
 

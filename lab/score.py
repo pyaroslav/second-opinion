@@ -22,7 +22,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from second_opinion import awr, review, rules, statspack  # noqa: E402
+from second_opinion import awr, review, rules, statspack, tracing  # noqa: E402
 
 # ADDM names each finding from a fixed vocabulary, so map its titles, in the order it ranks them.
 # "Top SQL Statements" only says which SQL used the time, not why: it counts as cpu_sql, never as full_scan.
@@ -70,11 +70,17 @@ def main():
         parsed = statspack.parse(d / "statspack.txt") if sp else awr.parse(d / "awr.html")
         raw_text = (d / ("statspack.txt" if sp else "awr.txt")).read_text(errors="replace")
         found = rules.check(parsed)
+        # each reviewer is one agent run in Sentry (when SENTRY_DSN is set), tagged by reviewer and report kind
         t0 = time.time()
-        ours = review.review(parsed, found, a.model)
+        with tracing.span("gen_ai.invoke_agent", "second-opinion review", **{"gen_ai.agent.name": "second-opinion",
+                          "reviewer": "second", "report.kind": "statspack" if sp else "awr"}):
+            ours = review.review(parsed, found, a.model)
         t_ours = time.time() - t0
         t0 = time.time()
-        raw = review.review_raw(raw_text, a.model)
+        with tracing.span("gen_ai.invoke_agent", "raw report review", **{"gen_ai.agent.name": "raw-baseline",
+                          "reviewer": "raw", "report.kind": "statspack" if sp else "awr",
+                          "report.chars": len(raw_text)}):
+            raw = review.review_raw(raw_text, a.model)
         t_raw = time.time() - t0
         row = {
             "run": d.name, "truth": truth,
@@ -91,6 +97,7 @@ def main():
         rows.append(row)
         print(f"{truth:13} {row['kind']:9} addm={row['addm_pass']!s:5} raw={row['raw_pass']!s:5} rules={row['rules_pass']!s:5} "
               f"second={row['second_pass']!s:5} | {ours['headline'][:90]}", flush=True)
+    tracing.flush()
     out = ROOT / "results" / f"{Path(a.runs).name}-{(a.model or review.MODEL).replace(':', '_')}.json"
     out.parent.mkdir(exist_ok=True)
     out.write_text(json.dumps(rows, indent=1))
