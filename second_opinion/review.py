@@ -32,7 +32,12 @@ seq_nocache = sequence contention (NOCACHE/ORDER); cpu_sql = one CPU-heavy SQL s
 cpu_cap = instance CPU-capped by Resource Manager; healthy = nothing significant; other = none of these."""
 
 
-def chat(prompt: str, schema: dict | None = None, model: str | None = None, ctx: int = 16384) -> str:
+# One context size for every call. Ollama reloads the model whenever num_ctx changes (about 4 s here);
+# Sentry showed reviews taking 5 s in the benchmark and 0.7 s from the CLI, and this was why.
+CTX = int(os.environ.get("SO_NUM_CTX", 32768))
+
+
+def chat(prompt: str, schema: dict | None = None, model: str | None = None, ctx: int = CTX) -> str:
     body = {"model": model or MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False,
             "think": False, "options": {"temperature": 0.1, "num_ctx": ctx}}
     if schema:
@@ -141,7 +146,7 @@ def review_raw(report_text: str, model: str | None = None, max_chars: int = 6000
         "Rank the most likely root causes (most important first) using these labels:\n" + GLOSSARY + "\n"
         "Then write a one-line headline and a short note (under 180 words) with the evidence and first two actions.\n\n"
         + report_text[:max_chars])
-    out = json.loads(chat(prompt, SCHEMA, model, ctx=32768))
+    out = json.loads(chat(prompt, SCHEMA, model))
     out["unsupported_numbers"] = unsupported(out["headline"] + " " + out["note"], set(numbers_in(report_text)))
     out["truncated"] = len(report_text) > max_chars
     return out

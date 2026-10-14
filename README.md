@@ -107,7 +107,7 @@ There were 18 runs: 9 AWR and 9 Statspack, each 7 minutes long. They used the sa
 | Rules alone | 9/9 | 8/9 |
 | **Second Opinion** | **9/9** | **8/9** |
 
-Numbers in the model's answers that were not in the data it was given: **0** for both Gemma reviewers. Second Opinion never needed its retry. A Second Opinion review took 4.3 s (median) on a local GPU.
+Numbers in the model's answers that were not in the data it was given: **0** for both Gemma reviewers. Second Opinion never needed its retry. A Second Opinion review takes 0.7 s (median) on a local GPU, against 2.3 s for Gemma reading the raw report. An earlier run measured about 5 s for both, because the two reviewers used different context sizes and Ollama reloaded the model on every switch. Sentry tracing showed the gap; see the post.
 
 Per-run rankings are in `results/test-gemma4_e4b.json`. The reports themselves are in `reports/test/`.
 
