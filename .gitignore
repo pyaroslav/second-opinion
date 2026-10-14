@@ -6,3 +6,4 @@ reports/*.log
 .venv-tinker/
 reports/train/
 reports/public/
+models/
