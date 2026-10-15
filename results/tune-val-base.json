@@ -1,0 +1,304 @@
+{
+ "summary": {
+  "model": "base",
+  "label": "base",
+  "set": "val",
+  "n": 15,
+  "pass": 12,
+  "top1": 8,
+  "false_causes": 33,
+  "invalid": 0,
+  "wall_seconds": 3.9,
+  "by_kind": {
+   "awr": "5/7",
+   "statspack": "7/8"
+  }
+ },
+ "runs": [
+  {
+   "run": "commit_storm-statspack-20261014T152805",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm",
+    "seq_nocache",
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"seq_nocache\", \"cpu_sql\"], \"evidence\": \"log file sync has 98.8% of db time with 549 seconds of wait, user commits are 1244.2, and the top SQL has 112826 executions with 5.44 elapsed time and 0.65 CPU time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 1717,
+   "output_tokens": 90
+  },
+  {
+   "run": "commit_storm-20261013T1614",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm",
+    "hard_parse",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"hard_parse\", \"seq_nocache\"], \"evidence\": \"The 'log file sync' event accounts for 90.9% of the wait time, indicating a commit storm, and the 'hard parses (SQL)' is 2.0, suggesting hard parse issues. The 'seq_cached.nextval' in the top SQL indicates sequence contention.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 3064,
+   "output_tokens": 86
+  },
+  {
+   "run": "commit_storm-statspack-20261013T1635",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm",
+    "cpu_sql",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"cpu_sql\", \"seq_nocache\"], \"evidence\": \"log file sync has 98.5% of db time with 1471 seconds of wait, insert into events values (seq_cached.nextval, sysdate, 'one row, one commit') has 16.49 seconds of elapsed time and 1.15 seconds of CPU time, and seq_cached is used in the insert statement.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 1526,
+   "output_tokens": 102
+  },
+  {
+   "run": "cpu_sql-20261013T1625",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_sql",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_sql\", \"seq_nocache\"], \"evidence\": \"The top SQL statement '44bmxzcjdxt4z' has a high CPU usage (99.45%) and is executed 878 times, indicating a CPU-heavy SQL statement. The hard parse count is 2.65, which is relatively low compared to the total parse count (31.14), suggesting potential for optimization. The 'sequence load elapsed time' is 0.0, indicating no sequence contention.\"}",
+   "pass": true,
+   "top1": false,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 3007,
+   "output_tokens": 120
+  },
+  {
+   "run": "cpu_sql-statspack-20261013T1645",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql",
+    "hard_parse",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"hard_parse\", \"seq_nocache\"], \"evidence\": \"The SQL with ID 3965011933 is consuming 99.9% of the CPU time with 600.32 seconds of elapsed time and 599.84 seconds of CPU time, indicating a CPU-heavy SQL statement. There are 0.0 hard parses, which suggests that the SQL is not using bind variables, leading to potential hard parse issues. The sequence contention is not evident in the report, but the lack of bind variables and high CPU usage are significant.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 1502,
+   "output_tokens": 135
+  },
+  {
+   "run": "full_scan-20261013T1603",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "cpu_sql",
+    "hard_parse",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"hard_parse\", \"seq_nocache\"], \"evidence\": \"The SQL with ID '5hpx70s5cv20n' is consuming 54.92% of total elapsed time and 75.24% CPU, indicating a CPU-heavy SQL statement. The hard parse count is 2.4, which is relatively low, but the SQL is executed 19769 times, suggesting potential for bind variable usage. The sequence load elapsed time is 0.0, but there is no evidence of sequence contention.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 3,
+   "invalid": false,
+   "prompt_tokens": 2974,
+   "output_tokens": 128
+  },
+  {
+   "run": "full_scan-statspack-20261013T1624",
+   "kind": "statspack",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "cpu_sql",
+    "full_scan",
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"full_scan\", \"hard_parse\"], \"evidence\": \"The SQL statement 'select count(*) from orders where customer_id = :1' is consuming 74.6% of total CPU time with 41,404 executions and 965,884,997 buffer gets, indicating a CPU-heavy SQL statement and a full table scan due to the high number of logical reads.\"}",
+   "pass": true,
+   "top1": false,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 1444,
+   "output_tokens": 98
+  },
+  {
+   "run": "hard_parse-20261013T1557",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_sql",
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_sql\", \"row_lock\"], \"evidence\": \"Hard parses (SQL) account for 3970.6, which is 98.5% of total parses (4016.4), indicating a high number of hard parses. The SQL with SQL ID 4zxrh77d4v3vj has 93.99% CPU usage and 0.53 seconds elapsed time, suggesting a CPU-heavy SQL statement. The latch: shared pool and row cache mutex waits indicate row lock contention.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 3256,
+   "output_tokens": 125
+  },
+  {
+   "run": "hard_parse-statspack-20261013T1619",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_sql",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_sql\", \"seq_nocache\"], \"evidence\": \"Hard parses (SQL) is 5518.8, which is almost equal to the total parses (SQL) of 5517.8, indicating literal SQL / no bind variables. The top SQL has a high number of executions (23982) with low CPU time per execution (0.0 s), suggesting a CPU-heavy SQL statement. There is no evidence of sequence contention or NOCACHE/ORDER issues.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 1379,
+   "output_tokens": 117
+  },
+  {
+   "run": "healthy-20261013T1552",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "commit_storm",
+    "cpu_sql",
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"cpu_sql\", \"hard_parse\"], \"evidence\": \"The 'log file sync' event accounts for 74.5% of DB time, indicating a commit storm. The SQL with ID '2vs8phnpj4zu9' has 86.89% CPU usage and is the top CPU-heavy SQL. The 'Hard parses (SQL)' is 1.78, which is relatively high compared to 'Parse count (total)' of 16.97, indicating potential hard parse issues.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 3,
+   "invalid": false,
+   "prompt_tokens": 2959,
+   "output_tokens": 122
+  },
+  {
+   "run": "healthy-statspack-20261013T1613",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "commit_storm",
+    "hard_parse",
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"hard_parse\", \"seq_nocache\"], \"evidence\": \"The event 'log file sync' has a high percentage of DB time (92.8%) and a large number of waits (11480.0), indicating a commit storm. The hard parses (SQL) are 0.8 out of 3.0 total parses, suggesting some hard parsing. There is no evidence of sequence contention or other issues.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 3,
+   "invalid": false,
+   "prompt_tokens": 1832,
+   "output_tokens": 103
+  },
+  {
+   "run": "row_lock-20261013T1608",
+   "kind": "awr",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock",
+    "commit_storm",
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\", \"commit_storm\", \"cpu_sql\"], \"evidence\": \"The event 'enq: TX - row lock contention' has 99.3% of DB time with 6423 waits, and the 'log file sync' event has 0.4% of DB time with 2756 waits. The SQL 'update hot set counter = counter + 1 where id = :1' has 2751 executions and 1243.31 seconds of elapsed time, indicating high row lock contention and frequent commits.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 2876,
+   "output_tokens": 129
+  },
+  {
+   "run": "row_lock-statspack-20261013T1629",
+   "kind": "statspack",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock",
+    "commit_storm",
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\", \"commit_storm\", \"cpu_sql\"], \"evidence\": \"enq: TX - row lock contention had 6481 waits and 99.4% of db time; log file sync had 2729 waits and 0.5% of db time; the SQL with SQL Id 1809327377 had 1247.58 elapsed time and 31% of total time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 1678,
+   "output_tokens": 108
+  },
+  {
+   "run": "seq_nocache-20261013T1619",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "commit_storm",
+    "seq_nocache",
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"seq_nocache\", \"hard_parse\"], \"evidence\": \"The 'log file sync' event accounts for 9.0% of DB time with 145.5 seconds of time, indicating a commit storm. The 'seq_nocache' sequence is heavily used with a high number of inserts and updates, and the 'hard parses (SQL)' is 0.9, suggesting potential hard parse issues.\"}",
+   "pass": true,
+   "top1": false,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 3202,
+   "output_tokens": 99
+  },
+  {
+   "run": "seq_nocache-statspack-20261013T1640",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "commit_storm",
+    "seq_nocache",
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"seq_nocache\", \"cpu_sql\"], \"evidence\": \"log file sync has 54% of db time with 646 seconds of waits, user commits are 278.5, and seq_nocache.nextval is used in a high-execution SQL statement with 4191346 executions.\"}",
+   "pass": true,
+   "top1": false,
+   "false_causes": 2,
+   "invalid": false,
+   "prompt_tokens": 2136,
+   "output_tokens": 83
+  }
+ ]
+}

@@ -1,0 +1,398 @@
+{
+ "summary": {
+  "model": "tinker://2a416ada-9e03-5963-b4f6-27010e58c282:train:0/sampler_weights/early-ep0",
+  "label": "early-ep0",
+  "set": "val",
+  "n": 23,
+  "pass": 11,
+  "top1": 11,
+  "false_causes": 5,
+  "invalid": 7,
+  "wall_seconds": 17.4,
+  "by_kind": {
+   "awr": "6/12",
+   "statspack": "5/11"
+  }
+ },
+ "runs": [
+  {
+   "run": "cpu_sql-statspack-20261014T165158",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "full_scan"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\"], \"evidence\": \"100% of logical reads are from full scans.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 1637,
+   "output_tokens": 29
+  },
+  {
+   "run": "commit_storm-statspack-20261014T155919",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 3.2 seconds per second. 0.0 seconds per second of row lock contention. 0.0 seconds per second of sequence contention. 0.0 seconds per second of CPU contention. 0.0 seconds per second of log file sync. 0.0 seconds per second of full scans. 0.0 seconds per second of hard parses. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full scans. 0.0 seconds per second of full",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 1441,
+   "output_tokens": 300
+  },
+  {
+   "run": "cpu_sql+full_scan-awr-20261014T155619",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql",
+    "full_scan"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"full_scan\"], \"evidence\": \"1233299.1 per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 2978,
+   "output_tokens": 300
+  },
+  {
+   "run": "commit_storm-statspack-20261014T152805",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 6.2 seconds per second. 1.1 seconds per second is spent in DB CPU. 0.0 seconds per second is spent in buffer busy waits. 0.0 seconds per second is spent in log file sync. 0.0 seconds per second is spent in library cache: mutex X. 0.0 seconds per second is spent in log file switch (private strand flush inc. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0 seconds per second is spent in other waits. 0.0",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 1717,
+   "output_tokens": 300
+  },
+  {
+   "run": "hard_parse-statspack-20261014T163612",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"6292.2 hard parses per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 1454,
+   "output_tokens": 300
+  },
+  {
+   "run": "cpu_sql+hard_parse-awr-20261014T152352",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"2142.7 hard parses per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 3040,
+   "output_tokens": 300
+  },
+  {
+   "run": "commit_storm+hard_parse-awr-20261014T175049",
+   "kind": "awr",
+   "truth": [
+    "commit_storm",
+    "hard_parse"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"2756.4 hard parses per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 3338,
+   "output_tokens": 300
+  },
+  {
+   "run": "seq_nocache-awr-20261014T165144",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 8.5% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2917,
+   "output_tokens": 31
+  },
+  {
+   "run": "seq_nocache-awr-20261014T173920",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 8.3% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3015,
+   "output_tokens": 31
+  },
+  {
+   "run": "commit_storm-20261013T1614",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 4.4 seconds per second. DB time is 4.4 seconds per second.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 3064,
+   "output_tokens": 38
+  },
+  {
+   "run": "commit_storm-statspack-20261013T1635",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"enq: HW - contention is 0.0% of DB time.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 1526,
+   "output_tokens": 34
+  },
+  {
+   "run": "cpu_sql-20261013T1625",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"row cache lock is 0.0% of DB time.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 3007,
+   "output_tokens": 30
+  },
+  {
+   "run": "cpu_sql-statspack-20261013T1645",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 3965011933 is 99.9% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1502,
+   "output_tokens": 40
+  },
+  {
+   "run": "full_scan-20261013T1603",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 4.0 seconds per second.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 2974,
+   "output_tokens": 27
+  },
+  {
+   "run": "full_scan-statspack-20261013T1624",
+   "kind": "statspack",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "full_scan"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\"], \"evidence\": \"141.0 per second of long table scans per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1444,
+   "output_tokens": 31
+  },
+  {
+   "run": "hard_parse-20261013T1557",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"3970.6 hard parses per second per second out of 4016.4 parses per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3256,
+   "output_tokens": 42
+  },
+  {
+   "run": "hard_parse-statspack-20261013T1619",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": null,
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"5518.8 hard parses per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per second per",
+   "pass": false,
+   "top1": false,
+   "false_causes": 0,
+   "invalid": true,
+   "prompt_tokens": 1379,
+   "output_tokens": 300
+  },
+  {
+   "run": "healthy-20261013T1552",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.1 seconds per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2959,
+   "output_tokens": 27
+  },
+  {
+   "run": "healthy-statspack-20261013T1613",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.1 seconds per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1832,
+   "output_tokens": 27
+  },
+  {
+   "run": "row_lock-20261013T1608",
+   "kind": "awr",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 99.3% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2876,
+   "output_tokens": 36
+  },
+  {
+   "run": "row_lock-statspack-20261013T1629",
+   "kind": "statspack",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 99.4% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1678,
+   "output_tokens": 36
+  },
+  {
+   "run": "seq_nocache-20261013T1619",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 59.6% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3202,
+   "output_tokens": 32
+  },
+  {
+   "run": "seq_nocache-statspack-20261013T1640",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 34.8% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2136,
+   "output_tokens": 32
+  }
+ ]
+}

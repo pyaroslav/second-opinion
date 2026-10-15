@@ -139,6 +139,19 @@ I collected ten AWR and Statspack reports posted publicly on the OraFAQ forums a
 
 Both checks were added *after* reading these cases. With them, the rules match the expert on 7 of 10. The three misses are two excerpts without the SQL sections the diagnosis needs, and a log-switch problem below the threshold. Because the checks were written with these cases in view, they're worked examples, not an accuracy figure. The reports aren't redistributed here; the thread links are in the post.
 
+### Fine-tuned Qwen3-8B on Tinker (an experiment, not the CLI)
+
+Can a small open model learn the triage from the parsed numbers alone, with no rules? `lab/tune/` fine-tunes Qwen3-8B with LoRA (rank 32) on [Tinker](https://thinkingmachines.ai/tinker/). The training data is 524 generated lab runs with their own tables and SQL. The 472 runs where the injected fault reached the report give 425 for training and 61 for validation (47 generated plus the 14 dev runs). The task is to output a ranked JSON list of causes. The prompt is the same for the base and the tuned model, with thinking off. I picked the epoch on validation, then scored once on the 18 held-out runs:
+
+| Qwen3-8B, held-out (18) | AWR | Statspack | Top cause right | False causes |
+|---|---|---|---|---|
+| Base, untuned | 5/9 | 6/9 | 11/18 | 38 |
+| Tuned (epoch 3 of 3) | 8/9 | 8/9 | 18/18 | 0 |
+
+Pass is the same rule as above. A false cause is a label that wasn't injected; `cpu_cap` isn't counted, since Free really does throttle itself. Both tuned misses are the full-scan + commit-storm pair, where it drops the full scan. Training cost about $1.61 at list price (3.66M tokens), and about $2 including the early run and evaluation. Results: `results/tune-*.json`.
+
+To run it offline, `lab/tune/export.py` merges the adapter into the `qwen3:8b` weights Ollama already has and quantizes to Q8_0. The local copy passes 16/18 and agrees with Tinker's top cause on 17/18, at about 0.5–0.7 s per report. The CLI still uses rules + Gemma. The tuned model answers the triage prompt in `lab/tune/data.py`, not the note prompt.
+
 ## Limits
 
 These are lab faults, one or two at a time, on a 26ai Free instance and a 12.2 SE2 container. Real systems are messier: several overlapping problems, RAC, Exadata, real storage, and reports covering an hour, not seven minutes. The set of causes is small and fixed. Anything outside it is reported as "other" at best.
@@ -160,6 +173,19 @@ python lab/faults.py all --test --seconds 420           # held-out set
 python lab/score.py --runs reports/test                 # score once
 python lab/score.py --runs reports/test --addm-only     # re-map ADDM without model calls
 pytest
+```
+
+Fine-tuning (needs `TINKER_API_KEY` and `pip install tinker tinker-cookbook`):
+
+```
+python lab/tune/generate.py --target free --runs 200      # training runs, own tables and SQL
+python lab/tune/build.py                                  # data/tune/{train,val,test}.jsonl
+python lab/tune/train.py --dry-run --epochs 3             # tokens and estimated cost
+python lab/tune/train.py --epochs 3 --name so             # a sampler checkpoint per epoch
+python lab/tune/evaluate.py --set val --model base --model tinker://.../so-ep2
+tinker checkpoint download tinker://.../sampler_weights/so-ep2 --output models/
+python lab/tune/export.py models/<dir> --name second-opinion-qwen3
+python lab/tune/baseline_local.py --model second-opinion-qwen3 --runs reports/test --compare results/tune-test-so-ep2.json
 ```
 
 In the lab, the 12.2 Statspack report failed with a divide-by-zero error. Its header computes cursors per session by dividing by the session count, and for these PDB-level snapshots that count was zero. So the lab runs a copy of `sprepins.sql` that wraps the two divisors in `nullif(...,0)`. Reports from ordinary databases don't need this.

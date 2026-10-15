@@ -1,0 +1,1080 @@
+{
+ "summary": {
+  "model": "tinker://35816ca5-76c2-5776-9e1b-22454ca00846:train:0/sampler_weights/so-ep1",
+  "label": "so-ep1",
+  "set": "val",
+  "n": 61,
+  "pass": 51,
+  "top1": 57,
+  "false_causes": 4,
+  "invalid": 0,
+  "wall_seconds": 8.5,
+  "by_kind": {
+   "awr": "24/31",
+   "statspack": "27/30"
+  }
+ },
+ "runs": [
+  {
+   "run": "full_scan-awr-20261014T190832",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "full_scan",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\", \"cpu_cap\"], \"evidence\": \"79.71 long and 2.34 short table scans per second, 1594043.9 logical reads per second. resmgr:cpu quantum is 32.5% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2931,
+   "output_tokens": 70
+  },
+  {
+   "run": "full_scan+seq_nocache-statspack-20261014T190812",
+   "kind": "statspack",
+   "truth": [
+    "full_scan",
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 10.1% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2412,
+   "output_tokens": 32
+  },
+  {
+   "run": "row_lock+commit_storm-awr-20261015T015259",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 87.7% of DB time at 2809.2 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2940,
+   "output_tokens": 43
+  },
+  {
+   "run": "healthy-statspack-20261014T204016",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2214,
+   "output_tokens": 31
+  },
+  {
+   "run": "cpu_sql-awr-20261015T030937",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"cpu_cap\"], \"evidence\": \"SQL 6sjxwy563f24n used 182.36 s of CPU in 574.0 executions. resmgr:cpu quantum is 32.1% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2992,
+   "output_tokens": 70
+  },
+  {
+   "run": "commit_storm-statspack-20261014T233716",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 91.5% of DB time at 1020.3 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1985,
+   "output_tokens": 43
+  },
+  {
+   "run": "full_scan-statspack-20261014T153458",
+   "kind": "statspack",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 3147124107 used 585.72 s of CPU in 28033.0 executions.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 1560,
+   "output_tokens": 51
+  },
+  {
+   "run": "healthy-statspack-20261015T005500",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.1 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2238,
+   "output_tokens": 31
+  },
+  {
+   "run": "hard_parse+cpu_sql-awr-20261015T013735",
+   "kind": "awr",
+   "truth": [
+    "hard_parse",
+    "cpu_sql"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_cap\"], \"evidence\": \"1350.4 hard parses per second out of 1384.8 parses. resmgr:cpu quantum is 38.9% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3065,
+   "output_tokens": 58
+  },
+  {
+   "run": "hard_parse-statspack-20261015T004735",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"1333.8 hard parses per second out of 1416.8 parses.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1743,
+   "output_tokens": 38
+  },
+  {
+   "run": "seq_nocache+row_lock-awr-20261015T045528",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 0.9% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3022,
+   "output_tokens": 31
+  },
+  {
+   "run": "row_lock-statspack-20261014T160230",
+   "kind": "statspack",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 95.2% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2034,
+   "output_tokens": 36
+  },
+  {
+   "run": "row_lock-statspack-20261015T032112",
+   "kind": "statspack",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 89.9% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1927,
+   "output_tokens": 36
+  },
+  {
+   "run": "seq_nocache-awr-20261014T222548",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 61.7% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3140,
+   "output_tokens": 32
+  },
+  {
+   "run": "hard_parse-awr-20261015T024558",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_cap\"], \"evidence\": \"3117.6 hard parses per second out of 4614.9 parses. resmgr:cpu quantum is 0.1% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3239,
+   "output_tokens": 57
+  },
+  {
+   "run": "commit_storm-statspack-20261015T034939",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 98.4% of DB time at 1427.1 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1852,
+   "output_tokens": 43
+  },
+  {
+   "run": "cpu_sql-statspack-20261014T163301",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 4050259453 used 179.59 s of CPU in 540.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1183,
+   "output_tokens": 49
+  },
+  {
+   "run": "row_lock+full_scan-awr-20261015T012659",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "cpu_sql",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"cpu_cap\"], \"evidence\": \"SQL g1hqn92j7pscv used 413.17 s of CPU in 141457.0 executions. resmgr:cpu quantum is 56.5% of DB time.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 2871,
+   "output_tokens": 71
+  },
+  {
+   "run": "row_lock+hard_parse-statspack-20261014T201610",
+   "kind": "statspack",
+   "truth": [
+    "row_lock",
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"row_lock\"], \"evidence\": \"5258.3 hard parses per second out of 5625.9 parses. enq: TX - row lock contention is 28.2% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1229,
+   "output_tokens": 61
+  },
+  {
+   "run": "hard_parse-awr-20261015T020406",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"2957.8 hard parses per second out of 3029.6 parses.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3101,
+   "output_tokens": 38
+  },
+  {
+   "run": "full_scan+commit_storm-awr-20261015T004959",
+   "kind": "awr",
+   "truth": [
+    "full_scan",
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"cpu_cap\"], \"evidence\": \"log file sync is 55.2% of DB time at 1852.2 transactions per second. resmgr:cpu quantum is 18.1% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3010,
+   "output_tokens": 63
+  },
+  {
+   "run": "commit_storm-statspack-20261015T011856",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 97.0% of DB time at 1450.7 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2332,
+   "output_tokens": 43
+  },
+  {
+   "run": "commit_storm-statspack-20261014T192439",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 98.4% of DB time at 1955.0 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1555,
+   "output_tokens": 43
+  },
+  {
+   "run": "cpu_sql-awr-20261014T162821",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"cpu_cap\"], \"evidence\": \"SQL 6sjxwy563f24n used 179.03 s of CPU in 541.0 executions. resmgr:cpu quantum is 0.4% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2902,
+   "output_tokens": 69
+  },
+  {
+   "run": "row_lock+cpu_sql-statspack-20261014T175704",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 1350819774 used 89.98 s of CPU in 209.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1635,
+   "output_tokens": 48
+  },
+  {
+   "run": "healthy-statspack-20261014T220335",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1844,
+   "output_tokens": 31
+  },
+  {
+   "run": "seq_nocache+cpu_sql-statspack-20261014T180550",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache",
+    "cpu_sql"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 9.9% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2437,
+   "output_tokens": 31
+  },
+  {
+   "run": "hard_parse+full_scan-awr-20261014T195857",
+   "kind": "awr",
+   "truth": [
+    "hard_parse",
+    "full_scan"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_cap\"], \"evidence\": \"869.7 hard parses per second out of 934.8 parses. resmgr:cpu quantum is 70.0% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2848,
+   "output_tokens": 56
+  },
+  {
+   "run": "hard_parse+row_lock-statspack-20261015T033747",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse",
+    "row_lock"
+   ],
+   "got": [
+    "hard_parse",
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"row_lock\"], \"evidence\": \"1129.7 hard parses per second out of 1169.0 parses. enq: TX - row lock contention is 6.7% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1712,
+   "output_tokens": 60
+  },
+  {
+   "run": "full_scan-awr-20261015T004547",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "cpu_sql",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"cpu_cap\"], \"evidence\": \"SQL g1hqn92j7pscv used 413.42 s of CPU in 133040.0 executions. resmgr:cpu quantum is 29.0% of DB time.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 2925,
+   "output_tokens": 71
+  },
+  {
+   "run": "seq_nocache-awr-20261014T164832",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 6.9% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3016,
+   "output_tokens": 31
+  },
+  {
+   "run": "seq_nocache-awr-20261014T221642",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 3.6% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2869,
+   "output_tokens": 31
+  },
+  {
+   "run": "healthy-awr-20261014T221854",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2825,
+   "output_tokens": 31
+  },
+  {
+   "run": "commit_storm-awr-20261015T002041",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 89.9% of DB time at 2870.5 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3045,
+   "output_tokens": 43
+  },
+  {
+   "run": "healthy-awr-20261014T204429",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2801,
+   "output_tokens": 31
+  },
+  {
+   "run": "healthy-awr-20261014T181442",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2984,
+   "output_tokens": 31
+  },
+  {
+   "run": "commit_storm-awr-20261015T012247",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 91.2% of DB time at 3335.3 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3056,
+   "output_tokens": 43
+  },
+  {
+   "run": "seq_nocache-statspack-20261014T223323",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 17.8% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2151,
+   "output_tokens": 32
+  },
+  {
+   "run": "seq_nocache-statspack-20261015T044944",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 5.4% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2025,
+   "output_tokens": 31
+  },
+  {
+   "run": "healthy-awr-20261014T171026",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2772,
+   "output_tokens": 31
+  },
+  {
+   "run": "cpu_sql-statspack-20261015T041951",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 4050259453 used 149.56 s of CPU in 467.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1919,
+   "output_tokens": 49
+  },
+  {
+   "run": "cpu_sql+hard_parse-awr-20261014T182901",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql",
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_cap\"], \"evidence\": \"596.1 hard parses per second out of 633.8 parses. resmgr:cpu quantum is 22.3% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3021,
+   "output_tokens": 56
+  },
+  {
+   "run": "full_scan+cpu_sql-awr-20261014T193443",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "cpu_sql",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"cpu_cap\"], \"evidence\": \"SQL 5vwuxnf1jvftw used 51.41 s of CPU in 124.0 executions. resmgr:cpu quantum is 46.6% of DB time.\"}",
+   "pass": false,
+   "top1": false,
+   "false_causes": 1,
+   "invalid": false,
+   "prompt_tokens": 2986,
+   "output_tokens": 67
+  },
+  {
+   "run": "seq_nocache-statspack-20261015T032952",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 2.6% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1947,
+   "output_tokens": 31
+  },
+  {
+   "run": "seq_nocache-awr-20261014T222036",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 16.1% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3044,
+   "output_tokens": 32
+  },
+  {
+   "run": "cpu_sql-statspack-20261014T215923",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 1350819774 used 479.51 s of CPU in 1126.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2276,
+   "output_tokens": 50
+  },
+  {
+   "run": "healthy-statspack-20261015T025541",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2042,
+   "output_tokens": 31
+  },
+  {
+   "run": "commit_storm-20261013T1614",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 90.9% of DB time at 3349.5 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3064,
+   "output_tokens": 43
+  },
+  {
+   "run": "commit_storm-statspack-20261013T1635",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 98.5% of DB time at 1886.0 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1526,
+   "output_tokens": 43
+  },
+  {
+   "run": "cpu_sql-20261013T1625",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\", \"cpu_cap\"], \"evidence\": \"SQL 44bmxzcjdxt4z used 596.67 s of CPU in 878.0 executions. resmgr:cpu quantum is 0.5% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3007,
+   "output_tokens": 67
+  },
+  {
+   "run": "cpu_sql-statspack-20261013T1645",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 3965011933 used 599.84 s of CPU in 920.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1502,
+   "output_tokens": 49
+  },
+  {
+   "run": "full_scan-20261013T1603",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "full_scan",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\", \"cpu_cap\"], \"evidence\": \"67.37 long and 6.46 short table scans per second, 1643446.9 logical reads per second. resmgr:cpu quantum is 49.1% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2974,
+   "output_tokens": 70
+  },
+  {
+   "run": "full_scan-statspack-20261013T1624",
+   "kind": "statspack",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "full_scan"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\"], \"evidence\": \"0.0 long and 141.0 short table scans per second, 3436277.3 logical reads per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1444,
+   "output_tokens": 49
+  },
+  {
+   "run": "hard_parse-20261013T1557",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_cap\"], \"evidence\": \"3970.6 hard parses per second out of 4016.4 parses. resmgr:cpu quantum is 35.4% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3256,
+   "output_tokens": 58
+  },
+  {
+   "run": "hard_parse-statspack-20261013T1619",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"5518.8 hard parses per second out of 5517.8 parses.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1379,
+   "output_tokens": 38
+  },
+  {
+   "run": "healthy-20261013T1552",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.1 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2959,
+   "output_tokens": 31
+  },
+  {
+   "run": "healthy-statspack-20261013T1613",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.1 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1832,
+   "output_tokens": 31
+  },
+  {
+   "run": "row_lock-20261013T1608",
+   "kind": "awr",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 99.3% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2876,
+   "output_tokens": 36
+  },
+  {
+   "run": "row_lock-statspack-20261013T1629",
+   "kind": "statspack",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 99.4% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1678,
+   "output_tokens": 36
+  },
+  {
+   "run": "seq_nocache-20261013T1619",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 59.6% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3202,
+   "output_tokens": 32
+  },
+  {
+   "run": "seq_nocache-statspack-20261013T1640",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 34.8% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2136,
+   "output_tokens": 32
+  }
+ ]
+}

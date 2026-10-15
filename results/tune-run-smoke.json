@@ -1,0 +1,19 @@
+{
+ "base": "Qwen/Qwen3-8B",
+ "renderer": "qwen3_disable_thinking",
+ "rank": 32,
+ "lr": 0.00047297908091376354,
+ "batch": 16,
+ "epochs": [
+  {
+   "epoch": 0,
+   "steps": 1,
+   "train_loss": 2.5786721282801666,
+   "val_loss": 1.0417819622499305,
+   "sampler_path": "tinker://9164c413-f7d1-5129-b060-117aed587c82:train:0/sampler_weights/smoke-ep0",
+   "time": "10:30:53"
+  }
+ ],
+ "train_examples": 2,
+ "train_tokens_per_epoch": 4850
+}

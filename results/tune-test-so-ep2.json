@@ -1,0 +1,334 @@
+{
+ "summary": {
+  "model": "tinker://35816ca5-76c2-5776-9e1b-22454ca00846:train:0/sampler_weights/so-ep2",
+  "label": "so-ep2",
+  "set": "test",
+  "n": 18,
+  "pass": 16,
+  "top1": 18,
+  "false_causes": 0,
+  "invalid": 0,
+  "wall_seconds": 3.7,
+  "by_kind": {
+   "awr": "8/9",
+   "statspack": "8/9"
+  }
+ },
+ "runs": [
+  {
+   "run": "commit_storm-awr-20261013T1704",
+   "kind": "awr",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 86.0% of DB time at 5183.3 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3063,
+   "output_tokens": 43
+  },
+  {
+   "run": "commit_storm-statspack-20261013T1720",
+   "kind": "statspack",
+   "truth": [
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 98.6% of DB time at 2294.6 transactions per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1593,
+   "output_tokens": 43
+  },
+  {
+   "run": "cpu_sql-awr-20261013T1719",
+   "kind": "awr",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 4kqb12z6wawd5 used 839.34 s of CPU in 579.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2972,
+   "output_tokens": 50
+  },
+  {
+   "run": "cpu_sql-statspack-20261013T1735",
+   "kind": "statspack",
+   "truth": [
+    "cpu_sql"
+   ],
+   "got": [
+    "cpu_sql"
+   ],
+   "raw": "{\"ranked_causes\": [\"cpu_sql\"], \"evidence\": \"SQL 3976249167 used 841.3 s of CPU in 582.0 executions.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1821,
+   "output_tokens": 48
+  },
+  {
+   "run": "full_scan+commit_storm-awr-20261013T1735",
+   "kind": "awr",
+   "truth": [
+    "full_scan",
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\", \"cpu_cap\"], \"evidence\": \"log file sync is 51.0% of DB time at 2771.4 transactions per second. resmgr:cpu quantum is 18.6% of DB time.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2949,
+   "output_tokens": 63
+  },
+  {
+   "run": "full_scan+commit_storm-statspack-20261013T1750",
+   "kind": "statspack",
+   "truth": [
+    "full_scan",
+    "commit_storm"
+   ],
+   "got": [
+    "commit_storm"
+   ],
+   "raw": "{\"ranked_causes\": [\"commit_storm\"], \"evidence\": \"log file sync is 75.3% of DB time at 1588.1 transactions per second.\"}",
+   "pass": false,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1676,
+   "output_tokens": 43
+  },
+  {
+   "run": "full_scan-awr-20261013T1649",
+   "kind": "awr",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "full_scan",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\", \"cpu_cap\"], \"evidence\": \"0.0 long and 645.75 short table scans per second, 1577381.2 logical reads per second. resmgr:cpu quantum is 28.5% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2930,
+   "output_tokens": 70
+  },
+  {
+   "run": "full_scan-statspack-20261013T1706",
+   "kind": "statspack",
+   "truth": [
+    "full_scan"
+   ],
+   "got": [
+    "full_scan"
+   ],
+   "raw": "{\"ranked_causes\": [\"full_scan\"], \"evidence\": \"0.0 long and 852.6 short table scans per second, 2110803.8 logical reads per second.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1432,
+   "output_tokens": 49
+  },
+  {
+   "run": "hard_parse+row_lock-awr-20261013T1727",
+   "kind": "awr",
+   "truth": [
+    "hard_parse",
+    "row_lock"
+   ],
+   "got": [
+    "row_lock",
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\", \"hard_parse\"], \"evidence\": \"enq: TX - row lock contention is 47.9% of DB time. 4949.9 hard parses per second out of 4969.8 parses.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3052,
+   "output_tokens": 62
+  },
+  {
+   "run": "hard_parse+row_lock-statspack-20261013T1742",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse",
+    "row_lock"
+   ],
+   "got": [
+    "row_lock",
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\", \"hard_parse\"], \"evidence\": \"enq: TX - row lock contention is 69.3% of DB time. 6382.4 hard parses per second out of 6383.5 parses.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1195,
+   "output_tokens": 62
+  },
+  {
+   "run": "hard_parse-awr-20261013T1642",
+   "kind": "awr",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse",
+    "cpu_cap"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\", \"cpu_cap\"], \"evidence\": \"4599.7 hard parses per second out of 4631.1 parses. resmgr:cpu quantum is 49.3% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3202,
+   "output_tokens": 58
+  },
+  {
+   "run": "hard_parse-statspack-20261013T1658",
+   "kind": "statspack",
+   "truth": [
+    "hard_parse"
+   ],
+   "got": [
+    "hard_parse"
+   ],
+   "raw": "{\"ranked_causes\": [\"hard_parse\"], \"evidence\": \"8811.8 hard parses per second out of 8812.8 parses.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1105,
+   "output_tokens": 38
+  },
+  {
+   "run": "healthy-awr-20261013T1634",
+   "kind": "awr",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.1 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3006,
+   "output_tokens": 31
+  },
+  {
+   "run": "healthy-statspack-20261013T1651",
+   "kind": "statspack",
+   "truth": [
+    "healthy"
+   ],
+   "got": [
+    "healthy"
+   ],
+   "raw": "{\"ranked_causes\": [\"healthy\"], \"evidence\": \"DB time is 0.0 seconds per second; nothing stands out.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1886,
+   "output_tokens": 31
+  },
+  {
+   "run": "row_lock-awr-20261013T1657",
+   "kind": "awr",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 99.2% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2900,
+   "output_tokens": 36
+  },
+  {
+   "run": "row_lock-statspack-20261013T1713",
+   "kind": "statspack",
+   "truth": [
+    "row_lock"
+   ],
+   "got": [
+    "row_lock"
+   ],
+   "raw": "{\"ranked_causes\": [\"row_lock\"], \"evidence\": \"enq: TX - row lock contention is 99.3% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 2067,
+   "output_tokens": 36
+  },
+  {
+   "run": "seq_nocache-awr-20261013T1712",
+   "kind": "awr",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 14.0% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 3016,
+   "output_tokens": 32
+  },
+  {
+   "run": "seq_nocache-statspack-20261013T1728",
+   "kind": "statspack",
+   "truth": [
+    "seq_nocache"
+   ],
+   "got": [
+    "seq_nocache"
+   ],
+   "raw": "{\"ranked_causes\": [\"seq_nocache\"], \"evidence\": \"row cache lock is 2.7% of DB time.\"}",
+   "pass": true,
+   "top1": true,
+   "false_causes": 0,
+   "invalid": false,
+   "prompt_tokens": 1828,
+   "output_tokens": 31
+  }
+ ]
+}

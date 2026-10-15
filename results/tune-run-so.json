@@ -1,0 +1,35 @@
+{
+ "base": "Qwen/Qwen3-8B",
+ "renderer": "qwen3_disable_thinking",
+ "rank": 32,
+ "lr": 0.00047297908091376354,
+ "batch": 16,
+ "epochs": [
+  {
+   "epoch": 0,
+   "steps": 27,
+   "train_loss": 0.2466942696001451,
+   "val_loss": 0.013990829571783986,
+   "sampler_path": "tinker://35816ca5-76c2-5776-9e1b-22454ca00846:train:0/sampler_weights/so-ep0",
+   "time": "01:07:58"
+  },
+  {
+   "epoch": 1,
+   "steps": 54,
+   "train_loss": 0.015847223254742044,
+   "val_loss": 0.013134303267832284,
+   "sampler_path": "tinker://35816ca5-76c2-5776-9e1b-22454ca00846:train:0/sampler_weights/so-ep1",
+   "time": "01:09:21"
+  },
+  {
+   "epoch": 2,
+   "steps": 81,
+   "train_loss": 0.008725425314723475,
+   "val_loss": 0.00567780821143252,
+   "sampler_path": "tinker://35816ca5-76c2-5776-9e1b-22454ca00846:train:0/sampler_weights/so-ep2",
+   "time": "01:10:52"
+  }
+ ],
+ "train_examples": 425,
+ "train_tokens_per_epoch": 1070004
+}

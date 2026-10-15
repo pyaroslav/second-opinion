@@ -1,0 +1,27 @@
+{
+ "base": "Qwen/Qwen3-8B",
+ "renderer": "qwen3_disable_thinking",
+ "rank": 32,
+ "lr": 0.00047297908091376354,
+ "batch": 16,
+ "epochs": [
+  {
+   "epoch": 0,
+   "steps": 6,
+   "train_loss": 0.8316572017182611,
+   "val_loss": 0.2114717733262785,
+   "sampler_path": "tinker://2a416ada-9e03-5963-b4f6-27010e58c282:train:0/sampler_weights/early-ep0",
+   "time": "13:12:50"
+  },
+  {
+   "epoch": 1,
+   "steps": 12,
+   "train_loss": 0.143085510842587,
+   "val_loss": 0.07709243655833779,
+   "sampler_path": "tinker://2a416ada-9e03-5963-b4f6-27010e58c282:train:0/sampler_weights/early-ep1",
+   "time": "13:13:20"
+  }
+ ],
+ "train_examples": 87,
+ "train_tokens_per_epoch": 207768
+}
