@@ -150,7 +150,7 @@ Can a small open model learn the triage from the parsed numbers alone, with no r
 
 Pass is the same rule as above. A false cause is a label that wasn't injected; `cpu_cap` isn't counted, since Free really does throttle itself. Both tuned misses are the full-scan + commit-storm pair, where it drops the full scan. Training cost about $1.61 at list price (3.66M tokens), and about $2 including the early run and evaluation. Results: `results/tune-*.json`.
 
-To run it offline, `lab/tune/export.py` merges the adapter into the `qwen3:8b` weights Ollama already has and quantizes to Q8_0. The local copy passes 16/18 and agrees with Tinker's top cause on 17/18, at about 0.5–0.7 s per report. The CLI still uses rules + Gemma. The tuned model answers the triage prompt in `lab/tune/data.py`, not the note prompt.
+To run it offline, `lab/tune/export.py` merges the adapter into the `qwen3:8b` weights Ollama already has and quantizes to Q8_0. The local copy passes 16/18 and agrees with Tinker's top cause on 17/18, at about 0.5–0.7 s per report. The adapter (PEFT and GGUF) is at [pyaroslav/second-opinion-qwen3-8b-lora](https://huggingface.co/pyaroslav/second-opinion-qwen3-8b-lora). The CLI still uses rules + Gemma. The tuned model answers the triage prompt in `lab/tune/data.py`, not the note prompt.
 
 ## Limits
 
