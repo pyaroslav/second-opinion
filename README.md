@@ -1,7 +1,7 @@
 # Second Opinion
 
 [![tests](https://github.com/pyaroslav/second-opinion/actions/workflows/tests.yml/badge.svg)](https://github.com/pyaroslav/second-opinion/actions/workflows/tests.yml)
-[![demo video](https://img.shields.io/badge/demo-84%20s%20video-red)](https://youtu.be/EQBUtAFVo2Y)
+[![demo video](https://img.shields.io/badge/demo-2%20min%20video-red)](https://youtu.be/NHd2CHh6tTs)
 [![model](https://img.shields.io/badge/%F0%9F%A4%97-LoRA%20adapter-yellow)](https://huggingface.co/pyaroslav/second-opinion-qwen3-8b-lora)
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
