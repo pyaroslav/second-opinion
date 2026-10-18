@@ -1,5 +1,12 @@
 # Second Opinion
 
+[![tests](https://github.com/pyaroslav/second-opinion/actions/workflows/tests.yml/badge.svg)](https://github.com/pyaroslav/second-opinion/actions/workflows/tests.yml)
+[![demo video](https://img.shields.io/badge/demo-84%20s%20video-red)](https://youtu.be/EQBUtAFVo2Y)
+[![model](https://img.shields.io/badge/%F0%9F%A4%97-LoRA%20adapter-yellow)](https://huggingface.co/pyaroslav/second-opinion-qwen3-8b-lora)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+![Second Opinion reviewing a held-out AWR report in the terminal](docs/demo.gif)
+
 Second Opinion gives a first-pass review of an Oracle AWR or Statspack report. It runs on your own machine with a local open model, Gemma 4 via Ollama, so the report never leaves the box.
 
 This is a real run on one of the held-out lab reports (`reports/test/hard_parse-statspack-*`):
@@ -16,12 +23,12 @@ Likely causes, most important first: Hard parsing (literal SQL, no binds)
 
 ## Note for the client
 
-The Statspack report indicates a significant performance issue primarily driven by hard parsing.
-The evidence shows that 100.0% of parses are hard parses, with 8811.8 hard parses per second. This
-high rate is contributing to the high wait time on library cache: mutex X, which accounts for 39.5%
-of DB time. To address this, first, review the application code to ensure all SQL statements
-utilize bind variables instead of literals. Second, investigate the SQL execution plan to see if
-indexing can be improved for the frequently executed statements.
+The Statspack report indicates a significant performance issue related to SQL execution. The primary
+finding is a high rate of hard parses, with 100.0% of parses being hard parses. This is evidenced by
+the high hard_parses_per_sec of 8811.8 and the associated wait event library cache: mutex X
+consuming 39.5% of DB time. To address this, first, review the application code to ensure all SQL
+statements utilize bind variables instead of literals. Second, investigate the SQL statements
+causing these parses to identify opportunities for better indexing or query rewriting.
 
 ## Findings (computed from the report, not by the model)
 
@@ -30,10 +37,10 @@ indexing can be improved for the frequently executed statements.
   `hard_parses_per_sec=8811.8, parses_per_sec=8812.8, hard_parse_pct=100.0,
    shared_pool_event=library cache: mutex X, shared_pool_event_pct_db_time=39.5`
 
-_Numbers checked: 3; every number in the note was found in the report. Model: gemma4:e4b. 5.8 s, all local._
+_Numbers checked: 3; every number in the note was found in the report. Model: gemma4:e4b. 0.5 s, all local._
 ```
 
-The diagnosis is right, and so are the numbers. The second suggestion in the note (indexing) doesn't apply to this problem. This is why the output is a draft for a DBA to edit, not something to send unread.
+The diagnosis is right, and so are the numbers. The second suggestion in the note (indexing, query rewriting) doesn't address this problem. This is why the output is a draft for a DBA to edit, not something to send unread.
 
 ## Who it is for
 
@@ -71,6 +78,7 @@ second-opinion report.html --out review.md       # also save the review
 second-opinion report.html --json                # machine-readable
 second-opinion report.html --no-gemma            # rules only, no model
 second-opinion report.html --model gemma4:26b    # a bigger local model
+second-opinion report.html --triage-model second-opinion-qwen3   # also the fine-tuned model's own ranking (see below)
 ```
 
 ## Results
@@ -150,7 +158,7 @@ Can a small open model learn the triage from the parsed numbers alone, with no r
 
 Pass is the same rule as above. A false cause is a label that wasn't injected; `cpu_cap` isn't counted, since Free really does throttle itself. Both tuned misses are the full-scan + commit-storm pair, where it drops the full scan. Training cost about $1.61 at list price (3.66M tokens), and about $2 including the early run and evaluation. Results: `results/tune-*.json`.
 
-To run it offline, `lab/tune/export.py` merges the adapter into the `qwen3:8b` weights Ollama already has and quantizes to Q8_0. The local copy passes 16/18 and agrees with Tinker's top cause on 17/18, at about 0.5–0.7 s per report. The adapter (PEFT and GGUF) is at [pyaroslav/second-opinion-qwen3-8b-lora](https://huggingface.co/pyaroslav/second-opinion-qwen3-8b-lora). The CLI still uses rules + Gemma. The tuned model answers the triage prompt in `lab/tune/data.py`, not the note prompt.
+To run it offline, `lab/tune/export.py` merges the adapter into the `qwen3:8b` weights Ollama already has and quantizes to Q8_0. The local copy passes 16/18 and agrees with Tinker's top cause on 17/18, at about 0.5–0.7 s per report. The adapter (PEFT and GGUF) is at [pyaroslav/second-opinion-qwen3-8b-lora](https://huggingface.co/pyaroslav/second-opinion-qwen3-8b-lora). The rules + Gemma review stays the default. With `--triage-model second-opinion-qwen3`, the CLI also asks the tuned model for its own ranking, using the exact prompt it was trained on (`second_opinion/triage.py`). It checks the numbers in the model's evidence against the report, and says whether the model agrees with the review. On the held-out set, this local second read gets the one report the review misses (the NOCACHE sequence on 12.2 Statspack) and disagrees on the healthy AWR run with real deadlocks, so a disagreement is a reason to read both, not a verdict.
 
 ## Limits
 

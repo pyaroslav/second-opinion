@@ -85,3 +85,21 @@ def test_a_pasted_top_events_section_is_enough(tmp_path):
 
 def test_sqlplus_scientific_notation_is_a_number():
     assert text._f("6.50139E+08") == 650139000.0
+
+
+def test_triage_prompt_is_compact_json_with_the_label_list():
+    from second_opinion import triage
+    d = statspack.parse(one("hard_parse-statspack-*/statspack.txt"))
+    p = triage.prompt(triage.digest(d))
+    assert "hard_parse = literal SQL" in p and '"ranked_causes"' in p
+    assert len(p) < 12000  # fits the 16K context the tuned model was trained with
+
+
+@pytest.mark.parametrize("text,want", [
+    ('{"ranked_causes": ["row_lock", "hard_parse"], "evidence": "x"}', ["row_lock", "hard_parse"]),
+    ('noise {"ranked_causes": ["made_up", "full_scan"]} noise', ["full_scan"]),
+    ("not json at all", None),
+])
+def test_triage_answer_keeps_only_known_labels(text, want):
+    from second_opinion import triage
+    assert triage.answer(text) == want

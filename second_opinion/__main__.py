@@ -4,6 +4,7 @@
     second-opinion sp_10_11.lst                     # Statspack (text, as spreport.sql writes it)
     second-opinion report.html --out review.md      # also save the review
     second-opinion report.html --no-gemma           # findings only, no language model
+    second-opinion report.html --triage-model second-opinion-qwen3   # add the fine-tuned model's own ranking
 
 Nothing is uploaded. The report is parsed here, the checks run here, and Gemma 4 runs in your
 local Ollama. Every number in the review is checked against the report before it is printed.
@@ -16,7 +17,7 @@ import sys
 import time
 from pathlib import Path
 
-from . import awr, review, rules, statspack, text, tracing
+from . import awr, review, rules, statspack, text, tracing, triage
 
 LABELS = {"hard_parse": "Hard parsing (literal SQL, no binds)", "full_scan": "Full scans / missing index",
           "row_lock": "Row lock contention", "commit_storm": "Committing too often (log file sync)",
@@ -40,7 +41,7 @@ def load(path: Path) -> dict:
                      "Top events section found.")
 
 
-def render(path: Path, d: dict, found: list[dict], r: dict | None, secs: float) -> str:
+def render(path: Path, d: dict, found: list[dict], r: dict | None, secs: float, t: dict | None = None) -> str:
     w, db = d.get("window") or {}, d.get("db") or {}
     out = [f"# Second Opinion: {path.name}", "",
            f"{d['source']} report · {db.get('DB Name', '?')} {db.get('Release', '')} · "
@@ -55,6 +56,28 @@ def render(path: Path, d: dict, found: list[dict], r: dict | None, secs: float) 
         if f["evidence"].get("sql_text"):
             out.append(f"  SQL: `{f['evidence']['sql_text'][:120]}`")
     out.append("")
+    if t:
+        out += [f"## Independent triage by {t['model']} (fine-tuned, no rules)", ""]
+        if t["ranked_causes"]:
+            out.append("Ranks: " + ", ".join(LABELS.get(c, c) for c in t["ranked_causes"]))
+            if t["evidence"]:
+                out.append(f"Because: {t['evidence']}")
+                if t["unsupported_numbers"]:
+                    out.append(f"NOT FOUND in the report: {t['unsupported_numbers']}")
+            ref = [c for c in (r["ranked_causes"] if r else [f["cause"] for f in found if f["score"] >= review.SIGNIFICANT])
+                   if c != "cpu_cap"]
+            mine = [c for c in t["ranked_causes"] if c != "cpu_cap"]
+            if ref and mine:
+                if mine[0] == ref[0]:
+                    out.append("Same top cause as the review above.")
+                elif set(mine) == set(ref):
+                    out.append("Same causes as the review above, in a different order.")
+                else:
+                    out.append(f"DIFFERS from the review above ({', '.join(LABELS.get(c, c) for c in ref)}): "
+                               "read both before you write to the client.")
+        else:
+            out.append("No usable answer from the model.")
+        out.append("")
     if r:
         check = ("every number in the note was found in the report" if not r["unsupported_numbers"]
                  else f"NOT FOUND in the report, check before sending: {r['unsupported_numbers']}")
@@ -69,6 +92,8 @@ def main():
     ap.add_argument("--json", action="store_true", help="print the parsed report and findings as JSON")
     ap.add_argument("--no-gemma", action="store_true")
     ap.add_argument("--model", help=f"Ollama model (default {review.MODEL})")
+    ap.add_argument("--triage-model", help="also ask a fine-tuned triage model in Ollama (e.g. second-opinion-qwen3, "
+                    "see lab/tune/export.py) to rank the causes from the parsed report, with no rules")
     a = ap.parse_args()
     if a.model:
         review.MODEL = a.model
@@ -86,12 +111,16 @@ def main():
             r = review.review(d, found)
             top.set_data("unsupported_numbers", len(r["unsupported_numbers"]))
             top.set_data("retried", r["retried"])
+        t = None
+        if a.triage_model:
+            t = triage.triage(d, a.triage_model)
+            top.set_data("triage_causes", t["ranked_causes"])
     tracing.flush()
 
     if a.json:
-        print(json.dumps({"parsed": d, "findings": found, "review": r}, indent=1, default=str))
+        print(json.dumps({"parsed": d, "findings": found, "review": r, "triage": t}, indent=1, default=str))
         return
-    text = render(a.report, d, found, r, time.time() - t0)
+    text = render(a.report, d, found, r, time.time() - t0, t)
     print(text)
     if a.out:
         a.out.write_text(text + "\n")

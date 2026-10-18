@@ -37,13 +37,14 @@ cpu_cap = instance CPU-capped by Resource Manager; healthy = nothing significant
 CTX = int(os.environ.get("SO_NUM_CTX", 32768))
 
 
-def chat(prompt: str, schema: dict | None = None, model: str | None = None, ctx: int = CTX) -> str:
+def chat(prompt: str, schema: dict | None = None, model: str | None = None, ctx: int = CTX,
+         temperature: float = 0.1) -> str:
     body = {"model": model or MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False,
-            "think": False, "options": {"temperature": 0.1, "num_ctx": ctx}}
+            "think": False, "options": {"temperature": temperature, "num_ctx": ctx}}
     if schema:
         body["format"] = schema
     with tracing.span("gen_ai.chat", f"chat {body['model']}", **{"gen_ai.system": "ollama",
-                      "gen_ai.request.model": body["model"], "gen_ai.request.temperature": 0.1}) as s:
+                      "gen_ai.request.model": body["model"], "gen_ai.request.temperature": temperature}) as s:
         r = httpx.post(f"{OLLAMA}/api/chat", json=body, timeout=600)
         r.raise_for_status()
         j = r.json()
